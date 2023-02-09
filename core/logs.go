@@ -4,6 +4,6 @@ import (
 	"github.com/rs/zerolog"
 )
 
-func setupLogs() {
+func SetupLogs() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 }
