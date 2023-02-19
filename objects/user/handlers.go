@@ -4,7 +4,7 @@ import (
 	"github.com/ansel1/merry"
 )
 
-func CreateUserHandler(req CreateUserRequest) (*CreateUserResponse, error) {
+func CreateUserHandler(req CreateUserRequest) (*CreateUserResponse, merry.Error) {
 	if doesUserExist(req.Login) {
 		return nil, merry.New("User with this login already exist").WithHTTPCode(400)
 	}

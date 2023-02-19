@@ -3,7 +3,7 @@ package core
 import (
 	"net/http"
 
-	"github.com/ansel1/merry/v2"
+	"github.com/ansel1/merry"
 	"github.com/rs/zerolog/log"
 )
 
@@ -12,7 +12,7 @@ import (
  */
 func handlerWrapper[Request any, Response any](
 	decoder func(*http.Request, *Request) error,
-	handler func(Request) (*Response, error),
+	handler func(Request) (*Response, merry.Error),
 	encoder func(http.ResponseWriter, *Response) error,
 ) func(http.ResponseWriter, *http.Request) {
 
@@ -52,7 +52,7 @@ func handlerWrapper[Request any, Response any](
 }
 
 func jsonHandlerWrapper[Request any, Response any](
-	handler func(Request) (*Response, error),
+	handler func(Request) (*Response, merry.Error),
 ) func(http.ResponseWriter, *http.Request) {
 	decoder := jsonDecoder[Request]
 	encoder := jsonEncoder[Response]

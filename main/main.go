@@ -2,12 +2,15 @@ package main
 
 import (
 	"github.com/GandarfHSE/dentistryBackend/core"
+	"github.com/GandarfHSE/dentistryBackend/utils/config"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
 	core.SetupLogs()
 
+	log.Info().Msg("Loading config...")
+	config.LoadConfig()
 	log.Info().Msg("Getting daemon...")
 	daemon := core.GetDaemon()
 	log.Info().Msg("Registering handlers...")

@@ -1,0 +1,10 @@
+{
+    "serverConfig": {
+        "host": "localhost",
+        "port": "8083"
+    },
+    "authConfig": {
+        "privatePath": "../privatekey.pem",
+        "publicPath": "../publickey.pem"
+    }
+}

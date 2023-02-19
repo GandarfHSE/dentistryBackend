@@ -7,7 +7,7 @@ import (
 )
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("hello!"))
+	w.Write([]byte("hello!\n"))
 }
 
 func (d *Daemon) RegisterHandlers() {

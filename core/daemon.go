@@ -3,7 +3,9 @@ package core
 import (
 	"fmt"
 	"net/http"
+	"os"
 
+	"github.com/GandarfHSE/dentistryBackend/utils/config"
 	"github.com/rs/zerolog/log"
 )
 
@@ -13,10 +15,15 @@ type Daemon struct {
 }
 
 func GetDaemon() *Daemon {
-	// TODO: use host/port from flags/envs
+	serverConfig, err := config.GetServerConfig()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get server config!")
+		os.Exit(1)
+	}
+
 	return &Daemon{
-		host: "localhost",
-		port: "8083",
+		host: serverConfig.Host,
+		port: serverConfig.Port,
 	}
 }
 
@@ -27,5 +34,6 @@ func (d *Daemon) SummonDaemon() {
 	err := http.ListenAndServe(url, nil)
 	if err != nil {
 		log.Error().Err(err).Msg("Error in SummonDaemon")
+		os.Exit(1)
 	}
 }
