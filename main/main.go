@@ -11,10 +11,16 @@ func main() {
 
 	log.Info().Msg("Loading config...")
 	config.LoadConfig()
+
+	log.Info().Msg("Loading authHandlers...")
+	core.LoadAuthHandlers()
+
 	log.Info().Msg("Getting daemon...")
 	daemon := core.GetDaemon()
+
 	log.Info().Msg("Registering handlers...")
 	daemon.RegisterHandlers()
+
 	log.Info().Msg("Summoning daemon...")
 	daemon.SummonDaemon()
 }
