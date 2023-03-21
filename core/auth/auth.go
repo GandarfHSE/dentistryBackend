@@ -15,22 +15,22 @@ type AuthHandlers struct {
 	jwtPublic  *rsa.PublicKey
 }
 
-var AuthHandlers_ *AuthHandlers
+var authHandlers *AuthHandlers
 
 func GetAuthHandlers() (*AuthHandlers, error) {
-	if AuthHandlers_ == nil {
-		log.Warn().Msg("GetAuthHandlers from nil: trying to load AuthHandlers_...")
+	if authHandlers == nil {
+		log.Warn().Msg("GetAuthHandlers from nil: trying to load authHandlers...")
 		err := LoadAuthHandlers()
 		if err != nil {
-			log.Error().Err(err).Msg("GetAuthHandlers from nil: failed to load AuthHandlers_!")
+			log.Error().Err(err).Msg("GetAuthHandlers from nil: failed to load authHandlers!")
 			return nil, err
 		}
 	}
-	return AuthHandlers_, nil
+	return authHandlers, nil
 }
 
 func LoadAuthHandlers() error {
-	AuthHandlers_ = nil
+	authHandlers = nil
 
 	jwtPrivatePath, err := config.GetAbsPrivatePath()
 	if err != nil {
@@ -65,7 +65,7 @@ func LoadAuthHandlers() error {
 		return err
 	}
 
-	AuthHandlers_ = &AuthHandlers{
+	authHandlers = &AuthHandlers{
 		jwtPrivate: jwtPrivate,
 		jwtPublic:  jwtPublic,
 	}

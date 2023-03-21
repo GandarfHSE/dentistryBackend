@@ -32,7 +32,8 @@ func LoginHandler(req LoginRequest) (*LoginResponce, merry.Error) {
 		return nil, merry.New("Wrong login or password").WithHTTPCode(400)
 	}
 
-	token, err := auth.AuthHandlers_.CreateToken(req.Login)
+	authHandlers, err := auth.GetAuthHandlers()
+	token, err := authHandlers.CreateToken(req.Login)
 	if err != nil {
 		return nil, merry.New("Cannot generate token!").WithHTTPCode(500)
 	}
