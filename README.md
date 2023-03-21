@@ -33,3 +33,12 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 Кидает `400`, если юзер существует или если роль некорректна.
 Кидает `500`, если не получилось добавить юзера.
+
+## /user/login
+- input: json
+- input format: string `login`, string `password`
+- curl example: `curl localhost:8083/user/login -d '{"login":"kek", "password":"lol"}'`
+- output: json with string `token` or string `err`
+
+Кидает `400`, если юзера не существует или если пароль некорректен
+Кидает `500`, если не получилось создать токен

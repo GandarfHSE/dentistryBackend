@@ -1,19 +1,10 @@
-package core
+package auth
 
 import (
-	"crypto/md5"
-
 	"github.com/ansel1/merry"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/rs/zerolog/log"
 )
-
-func (h *AuthHandlers) GenerateEncodedPassword(password string) [16]byte {
-	hh := md5.New()
-	var res [16]byte
-	copy(res[:], hh.Sum([]byte(password + "kek" + password))[0:16])
-	return res
-}
 
 func (h *AuthHandlers) CreateToken(username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{

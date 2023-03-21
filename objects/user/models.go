@@ -28,3 +28,12 @@ type CreateUserRequest struct {
 type CreateUserResponse struct {
 	Id int `json:"id"`
 }
+
+type LoginRequest struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+
+type LoginResponce struct {
+	JWT string `json:"jwt"`
+}

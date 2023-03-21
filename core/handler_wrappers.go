@@ -23,28 +23,27 @@ func handlerWrapper[Request any, Response any](
 		err := decoder(r, &req)
 		if err != nil {
 			log.Error().Err(err).Msg("Error while decoding request!")
-			errorEncoder(w, err)
 			w.WriteHeader(merry.HTTPCode(err))
+			errorEncoder(w, err)
 			return
 		}
 
 		respPtr, err := handler(req)
 		if err != nil {
 			log.Error().Err(err).Msg("Error while handling request!")
-			errorEncoder(w, err)
 			w.WriteHeader(merry.HTTPCode(err))
+			errorEncoder(w, err)
 			return
 		}
 
 		err = encoder(w, respPtr)
 		if err != nil {
 			log.Error().Err(err).Msg("Error while encoding response!")
-			errorEncoder(w, err)
 			w.WriteHeader(merry.HTTPCode(err))
+			errorEncoder(w, err)
 			return
 		}
 
-		w.WriteHeader(200)
 		log.Info().Msg("Request has been processed successfully!")
 	}
 

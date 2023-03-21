@@ -15,4 +15,6 @@ func (d *Daemon) RegisterHandlers() {
 
 	createUserHandler := jsonHandlerWrapper(user.CreateUserHandler)
 	http.HandleFunc("/user/create", createUserHandler)
+	loginHandler := jsonHandlerWrapper(user.LoginHandler)
+	http.HandleFunc("/user/login", loginHandler)
 }

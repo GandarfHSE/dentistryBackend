@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/GandarfHSE/dentistryBackend/core/auth"
 	"github.com/ansel1/merry"
 )
 
@@ -18,4 +19,23 @@ func CreateUserHandler(req CreateUserRequest) (*CreateUserResponse, merry.Error)
 	}
 
 	return &CreateUserResponse{Id: id}, nil
+}
+
+func LoginHandler(req LoginRequest) (*LoginResponce, merry.Error) {
+	if !doesUserExist(req.Login) {
+		return nil, merry.New("User with this login does not exist").WithHTTPCode(400)
+	}
+
+	user := GetUserByLogin(req.Login)
+	encodedPassword := generateEncodedPassword(req.Password)
+	if user.Password != encodedPassword {
+		return nil, merry.New("Wrong login or password").WithHTTPCode(400)
+	}
+
+	token, err := auth.AuthHandlers_.CreateToken(req.Login)
+	if err != nil {
+		return nil, merry.New("Cannot generate token!").WithHTTPCode(500)
+	}
+
+	return &LoginResponce{JWT: token}, nil
 }

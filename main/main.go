@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/GandarfHSE/dentistryBackend/core"
+	"github.com/GandarfHSE/dentistryBackend/core/auth"
+
 	"github.com/GandarfHSE/dentistryBackend/utils/config"
 	"github.com/rs/zerolog/log"
 )
@@ -13,7 +15,7 @@ func main() {
 	config.LoadConfig()
 
 	log.Info().Msg("Loading authHandlers...")
-	core.LoadAuthHandlers()
+	auth.LoadAuthHandlers()
 
 	log.Info().Msg("Getting daemon...")
 	daemon := core.GetDaemon()

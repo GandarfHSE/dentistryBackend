@@ -1,4 +1,4 @@
-package core
+package auth
 
 import (
 	"crypto/rsa"
@@ -11,28 +11,26 @@ import (
 
 type AuthHandlers struct {
 	// TODO: use postresql
-	logins     map[string]bool
-	passwords  map[string][16]byte
 	jwtPrivate *rsa.PrivateKey
 	jwtPublic  *rsa.PublicKey
 }
 
-var authHandlers *AuthHandlers
+var AuthHandlers_ *AuthHandlers
 
 func GetAuthHandlers() (*AuthHandlers, error) {
-	if authHandlers == nil {
-		log.Warn().Msg("GetAuthHandlers from nil: trying to load authHandlers...")
+	if AuthHandlers_ == nil {
+		log.Warn().Msg("GetAuthHandlers from nil: trying to load AuthHandlers_...")
 		err := LoadAuthHandlers()
 		if err != nil {
-			log.Error().Err(err).Msg("GetAuthHandlers from nil: failed to load authHandlers!")
+			log.Error().Err(err).Msg("GetAuthHandlers from nil: failed to load AuthHandlers_!")
 			return nil, err
 		}
 	}
-	return authHandlers, nil
+	return AuthHandlers_, nil
 }
 
 func LoadAuthHandlers() error {
-	authHandlers = nil
+	AuthHandlers_ = nil
 
 	jwtPrivatePath, err := config.GetAbsPrivatePath()
 	if err != nil {
@@ -67,9 +65,7 @@ func LoadAuthHandlers() error {
 		return err
 	}
 
-	authHandlers = &AuthHandlers{
-		logins:     make(map[string]bool),
-		passwords:  make(map[string][16]byte),
+	AuthHandlers_ = &AuthHandlers{
 		jwtPrivate: jwtPrivate,
 		jwtPublic:  jwtPublic,
 	}

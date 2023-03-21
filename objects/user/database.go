@@ -20,10 +20,14 @@ func addUser(req CreateUserRequest) (int, error) {
 	newUser := User{
 		Id:       maxId,
 		Login:    req.Login,
-		Password: req.Password,
+		Password: generateEncodedPassword(req.Password),
 		Role:     req.Role,
 	}
 	id_to_user[maxId] = newUser
 	maxId++
 	return maxId - 1, nil
+}
+
+func GetUserByLogin(login string) User {
+	return id_to_user[login_to_id[login]]
 }
