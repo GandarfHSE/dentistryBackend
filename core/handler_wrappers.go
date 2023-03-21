@@ -3,6 +3,7 @@ package core
 import (
 	"net/http"
 
+	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/ansel1/merry"
 	"github.com/rs/zerolog/log"
 )
@@ -12,7 +13,7 @@ import (
  */
 func handlerWrapper[Request any, Response any](
 	decoder func(*http.Request, *Request) error,
-	handler func(Request) (*Response, merry.Error),
+	handler func(Request, *cookie.Cookie) (*Response, merry.Error),
 	encoder func(http.ResponseWriter, *Response) error,
 ) func(http.ResponseWriter, *http.Request) {
 
@@ -28,7 +29,8 @@ func handlerWrapper[Request any, Response any](
 			return
 		}
 
-		respPtr, err := handler(req)
+		cookie, err := cookieDecoder(r)
+		respPtr, err := handler(req, cookie)
 		if err != nil {
 			log.Error().Err(err).Msg("Error while handling request!")
 			w.WriteHeader(merry.HTTPCode(err))
@@ -51,7 +53,7 @@ func handlerWrapper[Request any, Response any](
 }
 
 func jsonHandlerWrapper[Request any, Response any](
-	handler func(Request) (*Response, merry.Error),
+	handler func(Request, *cookie.Cookie) (*Response, merry.Error),
 ) func(http.ResponseWriter, *http.Request) {
 	decoder := jsonDecoder[Request]
 	encoder := jsonEncoder[Response]

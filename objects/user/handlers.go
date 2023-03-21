@@ -2,10 +2,11 @@ package user
 
 import (
 	"github.com/GandarfHSE/dentistryBackend/core/auth"
+	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/ansel1/merry"
 )
 
-func CreateUserHandler(req CreateUserRequest) (*CreateUserResponse, merry.Error) {
+func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResponse, merry.Error) {
 	if doesUserExist(req.Login) {
 		return nil, merry.New("User with this login already exist").WithHTTPCode(400)
 	}
@@ -21,7 +22,7 @@ func CreateUserHandler(req CreateUserRequest) (*CreateUserResponse, merry.Error)
 	return &CreateUserResponse{Id: id}, nil
 }
 
-func LoginHandler(req LoginRequest) (*LoginResponce, merry.Error) {
+func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Error) {
 	if !doesUserExist(req.Login) {
 		return nil, merry.New("User with this login does not exist").WithHTTPCode(400)
 	}

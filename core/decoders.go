@@ -5,8 +5,27 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/GandarfHSE/dentistryBackend/core/auth"
+	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/rs/zerolog/log"
 )
+
+func cookieDecoder(r *http.Request) (*cookie.Cookie, error) {
+	raw_cookie, err := r.Cookie("jwt")
+	if err != nil {
+		log.Warn().Msg("No JWT in cookie!")
+		return nil, err
+	}
+
+	authHandlers, err := auth.GetAuthHandlers()
+	username, err := authHandlers.ParseToken(raw_cookie.Value)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get username from JWT!")
+		return nil, err
+	}
+
+	return &cookie.Cookie{Username: username}, nil
+}
 
 func jsonDecoder[Request any](r *http.Request, v *Request) error {
 	reqBody, err := ioutil.ReadAll(r.Body)
