@@ -16,7 +16,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 # API
 
-Все доступные хендлеры можно найти в [core/handlers.go](https://github.com/GandarfHSE/dentistryBackend/blob/main/core/handlers.go#L13).
+Все доступные хендлеры можно найти в [core/handlers.go](https://github.com/GandarfHSE/dentistryBackend/blob/main/core/handlers.go).
 
 Любая ручка может пятисотить.
 
@@ -27,7 +27,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 ## /user/create
 - input: json
-- input format: string `login`, string `password`, int `role` (1, 2, 4, 8)
+- input format: string `login`, string `password`, int `role`: 1 (пациент), 2 (доктор), 4 (админ), 8 (разработчик)
 - curl example: `curl localhost:8083/user/create -d '{"login":"kek", "password":"lol", "role":1}'`
 - output: json with int `id` or string `err`
 
@@ -40,6 +40,16 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - output: json with string `jwt` or string `err`
 
 Кидает `400`, если юзера не существует или если пароль некорректен.
+
+## /user/list
+Выводит список всех юзеров (доступно только для админов и разработчиков)
+- input: empty json + cookie with `jwt`
+- curl example: `curl localhost:8083/user/list -d '{}' -b $(cat cookie.txt)` (cookie.txt: `jwt=input_token_here`)
+- output: json with `User` array `userlist` or string `err`
+
+Кидает `401`, если нет куки.
+
+Кидает `403`, если роль юзера не админ и не разработчик.
 
 ## /service/create
 - input: json

@@ -42,3 +42,22 @@ func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Err
 
 	return &LoginResponce{JWT: token}, nil
 }
+
+func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListResponce, merry.Error) {
+	if c == nil {
+		return nil, merry.New("Unauthorized").WithHTTPCode(401)
+	}
+
+	requester := GetUserByLogin(c.Username)
+	// TODO: maybe do separate logic with roles?
+	if requester.Role != AdminRole && requester.Role != DevRole {
+		return nil, merry.New("Access denied").WithHTTPCode(403)
+	}
+
+	userList, err := getUserList()
+	if err != nil {
+		return nil, merry.New("Can't get user list!").WithHTTPCode(500)
+	}
+
+	return &GetUserListResponce{UserList: userList}, nil
+}

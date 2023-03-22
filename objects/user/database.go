@@ -1,6 +1,9 @@
 package user
 
-import "github.com/GandarfHSE/dentistryBackend/utils/algo"
+import (
+	"github.com/GandarfHSE/dentistryBackend/utils/algo"
+	"github.com/ansel1/merry"
+)
 
 // TODO: use postgre
 var maxId int
@@ -17,7 +20,7 @@ func doesUserExist(login string) bool {
 }
 
 // returns id of created user if succeeded
-func addUser(req CreateUserRequest) (int, error) {
+func addUser(req CreateUserRequest) (int, merry.Error) {
 	login_to_id[req.Login] = maxId
 	newUser := User{
 		Id:       maxId,
@@ -32,4 +35,9 @@ func addUser(req CreateUserRequest) (int, error) {
 
 func GetUserByLogin(login string) User {
 	return id_to_user[login_to_id[login]]
+}
+
+func getUserList() ([]User, merry.Error) {
+	arr := algo.Values(id_to_user)
+	return arr, nil
 }

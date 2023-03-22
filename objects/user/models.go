@@ -13,10 +13,10 @@ func IsRoleValid(role int) bool {
 }
 
 type User struct {
-	Id       int
-	Login    string
-	Password string
-	Role     int
+	Id       int    `json:"id"`
+	Login    string `json:"login"`
+	Password string `json:"password"`
+	Role     int    `json:"role"`
 }
 
 type CreateUserRequest struct {
@@ -36,4 +36,11 @@ type LoginRequest struct {
 
 type LoginResponce struct {
 	JWT string `json:"jwt"`
+}
+
+type GetUserListRequest struct {
+}
+
+type GetUserListResponce struct {
+	UserList []User `json:"userlist"`
 }
