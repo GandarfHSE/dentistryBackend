@@ -1,5 +1,7 @@
 package user
 
+import "github.com/GandarfHSE/dentistryBackend/utils/algo"
+
 // TODO: use postgre
 var maxId int
 var login_to_id = map[string]int{}
@@ -20,7 +22,7 @@ func addUser(req CreateUserRequest) (int, error) {
 	newUser := User{
 		Id:       maxId,
 		Login:    req.Login,
-		Password: generateEncodedPassword(req.Password),
+		Password: algo.GenerateEncodedPassword(req.Password),
 		Role:     req.Role,
 	}
 	id_to_user[maxId] = newUser

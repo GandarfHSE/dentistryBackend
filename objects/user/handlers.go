@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/GandarfHSE/dentistryBackend/core/auth"
+	"github.com/GandarfHSE/dentistryBackend/utils/algo"
 	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/ansel1/merry"
 )
@@ -28,7 +29,7 @@ func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Err
 	}
 
 	user := GetUserByLogin(req.Login)
-	encodedPassword := generateEncodedPassword(req.Password)
+	encodedPassword := algo.GenerateEncodedPassword(req.Password)
 	if user.Password != encodedPassword {
 		return nil, merry.New("Wrong login or password").WithHTTPCode(400)
 	}
