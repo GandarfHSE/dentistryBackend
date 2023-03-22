@@ -18,7 +18,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 Все доступные хендлеры можно найти в [core/handlers.go](https://github.com/GandarfHSE/dentistryBackend/blob/main/core/handlers.go#L13).
 
-Любая ручка в теории может пятисотить.
+Любая ручка может пятисотить.
 
 ## /hello
 - input: None
@@ -31,9 +31,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - curl example: `curl localhost:8083/user/create -d '{"login":"kek", "password":"lol", "role":1}'`
 - output: json with int `id` or string `err`
 
-Кидает `400`, если юзер существует или если роль некорректна.
-
-Кидает `500`, если не получилось добавить юзера.
+Кидает `400`, если юзер существует или если роль некорректна (не 1/2/4/8).
 
 ## /user/login
 - input: json
@@ -43,4 +41,10 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 Кидает `400`, если юзера не существует или если пароль некорректен.
 
-Кидает `500`, если не получилось создать токен.
+## /service/create
+- input: json
+- input format: string `name`, string `desc`, int `cost`, int `duration`
+- curl example: `curl localhost:8083/service/create -d '{"name":"Чистка зубов", "desc":"оч круто чистим", "cost":300, "duration":42}'`
+- output: json with string `id` or string `err`
+
+Кидает `400`, если услуга с таким именем существует.
