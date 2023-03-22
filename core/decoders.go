@@ -18,13 +18,13 @@ func cookieDecoder(r *http.Request) (*cookie.Cookie, error) {
 	}
 
 	authHandlers, err := auth.GetAuthHandlers()
-	username, err := authHandlers.ParseToken(raw_cookie.Value)
+	cookie, err := authHandlers.ParseToken(raw_cookie.Value)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to get username from JWT!")
+		log.Error().Err(err).Msg("Failed to get cookie from JWT!")
 		return nil, err
 	}
 
-	return &cookie.Cookie{Username: username}, nil
+	return cookie, nil
 }
 
 func jsonDecoder[Request any](r *http.Request, v *Request) error {

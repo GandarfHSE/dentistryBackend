@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/ansel1/merry"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/rs/zerolog/log"
@@ -13,8 +14,7 @@ func (h *AuthHandlers) CreateToken(username string) (string, error) {
 	return token.SignedString(h.jwtPrivate)
 }
 
-// TODO: return struct instead of string
-func (h *AuthHandlers) ParseToken(tokenString string) (string, error) {
+func (h *AuthHandlers) ParseToken(tokenString string) (*cookie.Cookie, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			log.Error().Msg("Wrong token signing method!")
@@ -23,20 +23,22 @@ func (h *AuthHandlers) ParseToken(tokenString string) (string, error) {
 		return h.jwtPublic, nil
 	})
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		username, ok := claims["username"]
 		if !ok {
-			return "", merry.New("JWT claims do not have username field").WithHTTPCode(401)
+			return nil, merry.New("JWT claims do not have username field").WithHTTPCode(401)
 		}
 		usernameString, ok := username.(string)
 		if !ok {
-			return "", merry.New("Can't cast username to string").WithHTTPCode(400)
+			return nil, merry.New("Can't cast username to string").WithHTTPCode(400)
 		}
-		return usernameString, nil
+
+		cookie := cookie.Cookie{Username: usernameString}
+		return &cookie, nil
 	} else {
-		return "", merry.New("JWT invalid").WithHTTPCode(401)
+		return nil, merry.New("JWT invalid").WithHTTPCode(401)
 	}
 }
