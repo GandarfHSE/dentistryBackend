@@ -44,3 +44,7 @@ func jsonDecoder[Request any](r *http.Request, v *Request) error {
 	log.Info().Msg("Successfylly got JSON request")
 	return nil
 }
+
+func emptyDecoder[Request any](r *http.Request, v *Request) error {
+	return nil
+}

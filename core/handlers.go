@@ -19,12 +19,12 @@ func (d *Daemon) RegisterHandlers() {
 	http.HandleFunc("/user/create", createUserHandler)
 	loginHandler := jsonHandlerWrapper(user.LoginHandler)
 	http.HandleFunc("/user/login", loginHandler)
-	getUserListHandler := jsonHandlerWrapper(user.GetUserListHandler)
+	getUserListHandler := noBodyHandlerWrapper(user.GetUserListHandler)
 	http.HandleFunc("/user/list", getUserListHandler)
 
 	// service handlers
 	createServiceHandler := jsonHandlerWrapper(service.CreateServiceHandler)
 	http.HandleFunc("/service/create", createServiceHandler)
-	getServiceListHandler := jsonHandlerWrapper(service.GetServiceListHandler)
+	getServiceListHandler := noBodyHandlerWrapper(service.GetServiceListHandler)
 	http.HandleFunc("/service/list", getServiceListHandler)
 }

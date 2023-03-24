@@ -59,3 +59,11 @@ func jsonHandlerWrapper[Request any, Response any](
 	encoder := jsonEncoder[Response]
 	return handlerWrapper(decoder, handler, encoder)
 }
+
+func noBodyHandlerWrapper[Request any, Response any](
+	handler func(Request, *cookie.Cookie) (*Response, merry.Error),
+) func(http.ResponseWriter, *http.Request) {
+	decoder := emptyDecoder[Request]
+	encoder := jsonEncoder[Response]
+	return handlerWrapper(decoder, handler, encoder)
+}

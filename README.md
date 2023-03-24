@@ -43,8 +43,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 ## /user/list
 Выводит список всех юзеров (доступно только для админов и разработчиков)
-- input: empty json + cookie with `jwt`
-- curl example: `curl localhost:8083/user/list -d '{}' -b $(cat cookie.txt)` (cookie.txt: `jwt=input_token_here`)
+- input: cookie with `jwt`
+- curl example: `curl localhost:8083/user/list -b $(cat cookie.txt)` (cookie.txt: `jwt=input_token_here`)
 - output: json with `User` array `userlist` or string `err`
 
 Кидает `401`, если нет куки.
@@ -61,6 +61,6 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 ## /service/list
 Выводит список всех услуг
-- input: empty json
-- curl example: `curl localhost:8083/service/list -d '{}'`
+- input: None
+- curl example: `curl localhost:8083/service/list`
 - output: json with `Service` array `servicelist` or string `err`
