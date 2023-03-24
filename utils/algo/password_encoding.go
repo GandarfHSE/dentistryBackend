@@ -2,9 +2,10 @@ package algo
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 )
 
 func GenerateEncodedPassword(password string) string {
-	hh := md5.New()
-	return string(hh.Sum([]byte(password + "kek" + password)))
+	hash := md5.Sum([]byte(password + "kek" + password))
+	return hex.EncodeToString(hash[:])
 }
