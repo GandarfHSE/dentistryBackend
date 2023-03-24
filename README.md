@@ -58,3 +58,9 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - output: json with string `id` or string `err`
 
 Кидает `400`, если услуга с таким именем существует.
+
+## /service/list
+Выводит список всех услуг
+- input: empty json
+- curl example: `curl localhost:8083/service/list -d '{}'`
+- output: json with `Service` array `servicelist` or string `err`

@@ -1,6 +1,9 @@
 package service
 
-import "github.com/ansel1/merry"
+import (
+	"github.com/GandarfHSE/dentistryBackend/utils/algo"
+	"github.com/ansel1/merry"
+)
 
 // TODO: use postgre
 var maxId int
@@ -28,4 +31,9 @@ func addService(req CreateServiceRequest) (int, merry.Error) {
 	id_to_service[maxId] = newService
 	maxId++
 	return maxId - 1, nil
+}
+
+func getServiceList() ([]Service, merry.Error) {
+	arr := algo.Values(id_to_service)
+	return arr, nil
 }

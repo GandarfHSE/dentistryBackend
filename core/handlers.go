@@ -25,4 +25,6 @@ func (d *Daemon) RegisterHandlers() {
 	// service handlers
 	createServiceHandler := jsonHandlerWrapper(service.CreateServiceHandler)
 	http.HandleFunc("/service/create", createServiceHandler)
+	getServiceListHandler := jsonHandlerWrapper(service.GetServiceListHandler)
+	http.HandleFunc("/service/list", getServiceListHandler)
 }

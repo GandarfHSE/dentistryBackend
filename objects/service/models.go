@@ -18,3 +18,10 @@ type CreateServiceRequest struct {
 type CreateServiceResponce struct {
 	Id int `json:"id"`
 }
+
+type GetServiceListRequest struct {
+}
+
+type GetServiceListResponce struct {
+	ServiceList []Service `json:"servicelist"`
+}

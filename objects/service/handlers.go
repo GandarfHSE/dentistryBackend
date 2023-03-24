@@ -17,3 +17,12 @@ func CreateServiceHandler(req CreateServiceRequest, _ *cookie.Cookie) (*CreateSe
 
 	return &CreateServiceResponce{Id: id}, nil
 }
+
+func GetServiceListHandler(req GetServiceListRequest, _ *cookie.Cookie) (*GetServiceListResponce, merry.Error) {
+	serviceList, err := getServiceList()
+	if err != nil {
+		return nil, merry.New("Can't get service list!").WithHTTPCode(500)
+	}
+
+	return &GetServiceListResponce{ServiceList: serviceList}, nil
+}
