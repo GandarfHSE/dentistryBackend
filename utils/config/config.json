@@ -6,5 +6,12 @@
     "authConfig": {
         "privatePath": "../privatekey.pem",
         "publicPath": "../publickey.pem"
+    },
+    "dbConfig": {
+        "host": "localhost",
+        "port": "5432",
+        "username": "dent_user",
+        "password": "lolkek",
+        "database": "test_dent_db"
     }
 }

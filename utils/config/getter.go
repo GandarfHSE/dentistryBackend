@@ -6,12 +6,20 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+func tryLoadConfig() error {
+	log.Info().Msg("Trying to load config...")
+	err := LoadConfig()
+	if err != nil {
+		log.Error().Msg("Failed to load config!")
+		return err
+	}
+	return nil
+}
+
 func GetServerConfig() (*ServerConfig, error) {
 	if config == nil {
-		log.Warn().Msg("Reading ServerConfig from nil: trying to load config...")
-		err := LoadConfig()
+		err := tryLoadConfig()
 		if err != nil {
-			log.Error().Msg("Reading ServerConfig from nil: failed to load config!")
 			return nil, err
 		}
 	}
@@ -20,16 +28,25 @@ func GetServerConfig() (*ServerConfig, error) {
 
 func GetAuthConfig() (*AuthConfig, error) {
 	if config == nil {
-		log.Warn().Msg("Reading AuthConfig from nil: trying to load config...")
-		err := LoadConfig()
+		err := tryLoadConfig()
 		if err != nil {
-			log.Error().Msg("Reading AuthConfig from nil: failed to load config!")
 			return nil, err
 		}
 	}
 	return &config.AuthConfig, nil
 }
 
+func GetDatabaseConfig() (*DBConfig, error) {
+	if config == nil {
+		err := tryLoadConfig()
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &config.DatabaseConfig, nil
+}
+
+// TODO - move it
 func GetAbsPrivatePath() (string, error) {
 	authConfig, err := GetAuthConfig()
 	if err != nil {
