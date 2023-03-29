@@ -3,6 +3,7 @@ package config
 import (
 	"path/filepath"
 
+	pgx "github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog/log"
 )
 
@@ -36,7 +37,7 @@ func GetAuthConfig() (*AuthConfig, error) {
 	return &config.AuthConfig, nil
 }
 
-func GetDatabaseConfig() (*DBConfig, error) {
+func getDatabaseConfig() (*DBConfig, error) {
 	if config == nil {
 		err := tryLoadConfig()
 		if err != nil {
@@ -44,6 +45,28 @@ func GetDatabaseConfig() (*DBConfig, error) {
 		}
 	}
 	return &config.DatabaseConfig, nil
+}
+
+func GetConnConfig() (*pgx.ConnConfig, error) {
+	dbconfig, err := getDatabaseConfig()
+
+	if err != nil {
+		log.Error().Msg("Failed to get pgx.ConnConfig!")
+		return nil, err
+	}
+
+	connConfig, err := pgx.ParseConfig("")
+	if err != nil {
+		return nil, err
+	}
+
+	connConfig.Host = dbconfig.Host
+	connConfig.Port = uint16(dbconfig.Port)
+	connConfig.User = dbconfig.Username
+	connConfig.Password = dbconfig.Password
+	connConfig.Database = dbconfig.Database
+
+	return connConfig, nil
 }
 
 // TODO - move it
