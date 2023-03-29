@@ -11,7 +11,7 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write([]byte("hello!\n"))
 }
 
-func (d *Daemon) RegisterHandlers() {
+func RegisterHandlers() {
 	http.HandleFunc("/hello", helloHandler)
 
 	// user handlers

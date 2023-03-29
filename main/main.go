@@ -17,11 +17,11 @@ func main() {
 	log.Info().Msg("Loading authHandlers...")
 	auth.LoadAuthHandlers()
 
+	log.Info().Msg("Registering handlers...")
+	core.RegisterHandlers()
+
 	log.Info().Msg("Getting daemon...")
 	daemon := core.GetDaemon()
-
-	log.Info().Msg("Registering handlers...")
-	daemon.RegisterHandlers()
 
 	log.Info().Msg("Summoning daemon...")
 	daemon.SummonDaemon()
