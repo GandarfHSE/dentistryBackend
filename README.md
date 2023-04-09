@@ -1,5 +1,5 @@
-# Как запустить
-- Установите go (например, [по этому гайду](https://howistart.org/posts/go/1/#setting-up-your-environment))
+# Как запустить (инструкция для Ubuntu 22.04)
+- Установите go версии хотя бы 1.19 (например, [по этому гайду](https://howistart.org/posts/go/1/#setting-up-your-environment))
 - Установите в переменную окружения `DENT_CONFIG_PATH` путь до [конфига](https://github.com/GandarfHSE/dentistryBackend/blob/main/utils/config/config.json):
 ```bash
 export DENT_CONFIG_PATH=$PATH_TO_REPO/utils/config/config.json
@@ -9,9 +9,12 @@ export DENT_CONFIG_PATH=$PATH_TO_REPO/utils/config/config.json
 openssl genrsa -out privatekey.pem 2048
 openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 ```
+- Установите [postgres](https://www.postgresql.org/download/)
+- Создайте базу данных `test_dent_db` и [установите пароль](https://stackoverflow.com/questions/12720967/how-can-i-change-a-postgresql-user-password) `postgres` на юзера `postgres` (конфигурируется [тут](https://github.com/GandarfHSE/dentistryBackend/blob/main/utils/config/config.json)), базовые команды psql [тут](https://www.postgresqltutorial.com/postgresql-administration/psql-commands/)
 - Перейдите в папку `main`
 - Выполните `go build`
 - Выполните `./main`
+
 Прибить можно с помощью `Ctrl + C`
 
 # API

@@ -7,11 +7,11 @@
         "privatePath": "../privatekey.pem",
         "publicPath": "../publickey.pem"
     },
-    "dbConfig": {
+    "databaseConfig": {
         "host": "localhost",
         "port":     5432,
-        "username": "dent_user",
-        "password": "lolkek",
+        "username": "postgres",
+        "password": "postgres",
         "database": "test_dent_db"
     }
 }

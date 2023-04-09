@@ -2,9 +2,11 @@ package database
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/config"
 	"github.com/jackc/pgx/v5"
+	"github.com/rs/zerolog/log"
 )
 
 func getSession(opt pgx.TxOptions) (*Session, error) {
@@ -12,6 +14,8 @@ func getSession(opt pgx.TxOptions) (*Session, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	log.Info().Msg(fmt.Sprintf("host = %s, user = %s", conf.Host, conf.User))
 
 	s := Session{
 		Ctx:    context.Background(),

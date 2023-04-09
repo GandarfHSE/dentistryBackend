@@ -5,6 +5,7 @@ import (
 	"github.com/GandarfHSE/dentistryBackend/core/auth"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/config"
+	"github.com/GandarfHSE/dentistryBackend/utils/migration"
 	"github.com/rs/zerolog/log"
 )
 
@@ -22,6 +23,9 @@ func main() {
 
 	log.Info().Msg("Getting daemon...")
 	daemon := core.GetDaemon()
+
+	log.Info().Msg("Make migration...")
+	migration.MakeFullMigration()
 
 	log.Info().Msg("Summoning daemon...")
 	daemon.SummonDaemon()

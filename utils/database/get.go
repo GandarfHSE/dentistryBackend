@@ -28,7 +28,7 @@ func Get[Model any](s *Session, q string, args ...any) ([]Model, error) {
 		return nil, errors.New("Get: session transaction does not exist!")
 	}
 
-	rows, err := s.tx.Query(s.Ctx, q, args)
+	rows, err := s.tx.Query(s.Ctx, q, args...)
 	if err != nil {
 		return nil, err
 	}
