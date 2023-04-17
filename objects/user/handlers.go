@@ -4,31 +4,54 @@ import (
 	"github.com/GandarfHSE/dentistryBackend/core/auth"
 	"github.com/GandarfHSE/dentistryBackend/utils/algo"
 	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
+	"github.com/GandarfHSE/dentistryBackend/utils/database"
 	"github.com/ansel1/merry"
+	"github.com/rs/zerolog/log"
 )
 
 func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResponse, merry.Error) {
-	if doesUserExist(req.Login) {
+	s, err := database.GetReadWriteSession()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get write session at CreateUserHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	defer s.Close()
+
+	exists, err := doesUserExist(s, req.Login)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	if exists {
 		return nil, merry.New("User with this login already exists").WithHTTPCode(400)
 	}
 	if !IsRoleValid(req.Role) {
 		return nil, merry.New("Invalid role").WithHTTPCode(400)
 	}
 
-	id, err := addUser(req)
-	if err != nil {
+	if err = addUser(s, req); err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &CreateUserResponse{Id: id}, nil
+	return &CreateUserResponse{}, nil
 }
 
 func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Error) {
-	if !doesUserExist(req.Login) {
+	s, err := database.GetReadSession()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get write session at LoginHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	defer s.Close()
+
+	user, err, exists := getUserByLogin(s, req.Login)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !exists {
 		return nil, merry.New("User with this login does not exist").WithHTTPCode(400)
 	}
 
-	user := GetUserByLogin(req.Login)
 	encodedPassword := algo.GenerateEncodedPassword(req.Password)
 	if user.Password != encodedPassword {
 		return nil, merry.New("Wrong login or password").WithHTTPCode(400)
@@ -45,16 +68,26 @@ func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Err
 
 func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListResponce, merry.Error) {
 	if c == nil {
-		return nil, merry.New("Unauthorized").WithHTTPCode(401)
+		return nil, merry.New("No cookie!").WithHTTPCode(401)
 	}
 
-	requester := GetUserByLogin(c.Username)
+	s, err := database.GetReadSession()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get write session at GetUserListHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	defer s.Close()
+
+	requester, err, _ := getUserByLogin(s, c.Username)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
 	// TODO: maybe do separate logic with roles?
 	if requester.Role != AdminRole && requester.Role != DevRole {
 		return nil, merry.New("Access denied").WithHTTPCode(403)
 	}
 
-	userList, err := getUserList()
+	userList, err := getUserList(s)
 	if err != nil {
 		return nil, merry.New("Can't get user list!").WithHTTPCode(500)
 	}

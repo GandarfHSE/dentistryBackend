@@ -25,7 +25,7 @@ func getAllTablesNames(s *database.Session) ([]string, error) {
 }
 
 func dropDatabase() error {
-	s, err := database.GetWriteSession()
+	s, err := database.GetReadWriteSession()
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func MakeFullMigration() {
 		os.Exit(1)
 	}
 
-	s, err := database.GetWriteSession()
+	s, err := database.GetReadWriteSession()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get write session for full migration!")
 		os.Exit(1)

@@ -34,7 +34,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json
 - input format: string `login`, string `password`, int `role`: 1 (пациент), 2 (доктор), 4 (админ), 8 (разработчик)
 - curl example: `curl localhost:8083/user/create -d '{"login":"kek", "password":"lol", "role":1}'`
-- output: json with int `id`
+- output: empty json
 
 Кидает `400`, если юзер существует или если роль некорректна (не 1/2/4/8).
 

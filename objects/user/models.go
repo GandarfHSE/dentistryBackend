@@ -26,7 +26,6 @@ type CreateUserRequest struct {
 }
 
 type CreateUserResponse struct {
-	Id int `json:"id"`
 }
 
 type LoginRequest struct {

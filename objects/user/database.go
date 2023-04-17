@@ -1,43 +1,59 @@
 package user
 
 import (
+	"fmt"
+
 	"github.com/GandarfHSE/dentistryBackend/utils/algo"
-	"github.com/ansel1/merry"
+	"github.com/GandarfHSE/dentistryBackend/utils/database"
 )
 
-// TODO: use postgre
-var maxId int
-var login_to_id = map[string]int{}
-var id_to_user = map[int]User{}
+func addUser(s *database.Session, req CreateUserRequest) error {
+	q := `
+		INSERT INTO "users" (login, password, role)
+		VALUES ('%s', '%s', %d);
+	`
 
-func doesUserExist(login string) bool {
-	id, exist := login_to_id[login]
-	if !exist {
-		return false
+	err := database.Modify(s, fmt.Sprintf(q, req.Login, algo.GenerateEncodedPassword(req.Password), req.Role))
+	return err
+}
+
+func getUserByLogin(s *database.Session, login string) (User, error, bool) {
+	q := `
+		SELECT *
+		FROM "users"
+		WHERE "login" = '%s';
+	`
+
+	users, err := database.Get[User](s, fmt.Sprintf(q, login))
+	if err != nil {
+		return User{}, err, false
 	}
-	_, exist = id_to_user[id]
-	return exist
-}
 
-// returns id of created user if succeeded
-func addUser(req CreateUserRequest) (int, merry.Error) {
-	login_to_id[req.Login] = maxId
-	newUser := User{
-		Id:       maxId,
-		Login:    req.Login,
-		Password: algo.GenerateEncodedPassword(req.Password),
-		Role:     req.Role,
+	if len(users) > 0 {
+		return users[0], nil, true
+	} else {
+		return User{}, nil, false
 	}
-	id_to_user[maxId] = newUser
-	maxId++
-	return maxId - 1, nil
 }
 
-func GetUserByLogin(login string) User {
-	return id_to_user[login_to_id[login]]
+func doesUserExist(s *database.Session, login string) (bool, error) {
+	_, err, exists := getUserByLogin(s, login)
+	if err != nil {
+		return false, err
+	}
+	return exists, nil
 }
 
-func getUserList() ([]User, merry.Error) {
-	arr := algo.Values(id_to_user)
-	return arr, nil
+func getUserList(s *database.Session) ([]User, error) {
+	q := `
+		SELECT *
+		FROM "users";
+	`
+
+	users, err := database.Get[User](s, q)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
