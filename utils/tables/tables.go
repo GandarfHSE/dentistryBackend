@@ -10,6 +10,7 @@ import (
 
 var TableVersions = []string{
 	createUserTable,
+	createServiceTable,
 }
 
 func ApplyVersion(version int, s *database.Session) {
