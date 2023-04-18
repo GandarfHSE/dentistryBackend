@@ -38,10 +38,7 @@ func getUserByLogin(s *database.Session, login string) (User, error, bool) {
 
 func doesUserExist(s *database.Session, login string) (bool, error) {
 	_, err, exists := getUserByLogin(s, login)
-	if err != nil {
-		return false, err
-	}
-	return exists, nil
+	return exists, err
 }
 
 func getUserList(s *database.Session) ([]User, error) {
@@ -50,10 +47,5 @@ func getUserList(s *database.Session) ([]User, error) {
 		FROM "users";
 	`
 
-	users, err := database.Get[User](s, q)
-	if err != nil {
-		return nil, err
-	}
-
-	return users, nil
+	return database.Get[User](s, q)
 }

@@ -58,9 +58,9 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 ## /service/create
 - input: json
-- input format: string `name`, string `desc`, int `cost`, int `duration`
-- curl example: `curl localhost:8083/service/create -d '{"name":"Чистка зубов", "desc":"оч круто чистим", "cost":300, "duration":42}'`
-- output: json with string `id`
+- input format: string `name`, string `description`, int `cost`, int `duration`
+- curl example: `curl localhost:8083/service/create -d '{"name":"Чистка зубов", "description":"оч круто чистим", "cost":300, "duration":42}'`
+- output: empty json
 
 Кидает `400`, если услуга с таким именем существует.
 

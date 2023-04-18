@@ -39,7 +39,7 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Error) {
 	s, err := database.GetReadSession()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get write session at LoginHandler!")
+		log.Error().Err(err).Msg("Can't get read session at LoginHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 	defer s.Close()
@@ -60,7 +60,7 @@ func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Err
 	authHandlers, err := auth.GetAuthHandlers()
 	token, err := authHandlers.CreateToken(req.Login)
 	if err != nil {
-		return nil, merry.New("Cannot generate token!").WithHTTPCode(500)
+		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
 	return &LoginResponce{JWT: token}, nil
@@ -73,7 +73,7 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 
 	s, err := database.GetReadSession()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get write session at GetUserListHandler!")
+		log.Error().Err(err).Msg("Can't get read session at GetUserListHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 	defer s.Close()
@@ -89,7 +89,7 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 
 	userList, err := getUserList(s)
 	if err != nil {
-		return nil, merry.New("Can't get user list!").WithHTTPCode(500)
+		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
 	return &GetUserListResponce{UserList: userList}, nil
