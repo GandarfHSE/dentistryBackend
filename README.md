@@ -1,5 +1,5 @@
 # Как запустить (инструкция для Ubuntu 22.04)
-- Установите go версии хотя бы 1.19 (например, [по этому гайду](https://howistart.org/posts/go/1/#setting-up-your-environment))
+- Установите go версии хотя бы 1.19 (например, [по этому гайду](https://go.dev/doc/install))
 - Установите в переменную окружения `DENT_CONFIG_PATH` путь до [конфига](https://github.com/GandarfHSE/dentistryBackend/blob/main/utils/config/config.json):
 ```bash
 export DENT_CONFIG_PATH=$PATH_TO_REPO/utils/config/config.json
