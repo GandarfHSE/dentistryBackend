@@ -11,11 +11,11 @@ import (
 
 func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResponse, merry.Error) {
 	s, err := database.GetReadWriteSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get write session at CreateUserHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	defer s.Close()
 
 	exists, err := doesUserExist(s, req.Login)
 	if err != nil {
@@ -37,11 +37,11 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 
 func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Error) {
 	s, err := database.GetReadSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get read session at LoginHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	defer s.Close()
 
 	user, err, exists := getUserByLogin(s, req.Login)
 	if err != nil {
@@ -71,11 +71,11 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 	}
 
 	s, err := database.GetReadSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get read session at GetUserListHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	defer s.Close()
 
 	requester, err, _ := getUserByLogin(s, c.Username)
 	if err != nil {

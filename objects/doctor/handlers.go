@@ -10,14 +10,13 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// TODO - move s.Close() before err
 func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*CreateDoctorInfoResponce, merry.Error) {
 	s, err := database.GetReadWriteSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get write session at CreateDoctorInfoHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	defer s.Close()
 
 	user_, err, exists := user.GetUserById(s, req.Uid)
 	if err != nil {
@@ -36,11 +35,11 @@ func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*Cr
 
 func GetDoctorInfoHandler(req GetDoctorInfoRequest, _ *cookie.Cookie) (*GetDoctorInfoResponce, merry.Error) {
 	s, err := database.GetReadSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get read session at GetDoctorInfoHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	defer s.Close()
 
 	doctorInfo, err, exists := getDoctorInfoByUid(s, req.Uid)
 	if err != nil {

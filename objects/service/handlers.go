@@ -11,11 +11,11 @@ import (
 
 func CreateServiceHandler(req CreateServiceRequest, _ *cookie.Cookie) (*CreateServiceResponce, merry.Error) {
 	s, err := database.GetReadWriteSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get write session at CreateServiceHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	defer s.Close()
 
 	exists, err := doesServiceExistByName(s, req.Name)
 	if err != nil {
@@ -36,11 +36,11 @@ func CreateServiceHandler(req CreateServiceRequest, _ *cookie.Cookie) (*CreateSe
 
 func GetServiceListHandler(req GetServiceListRequest, _ *cookie.Cookie) (*GetServiceListResponce, merry.Error) {
 	s, err := database.GetReadSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get read session at GetServiceListHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	defer s.Close()
 
 	serviceList, err := getServiceList(s)
 	if err != nil {
