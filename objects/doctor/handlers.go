@@ -1,1 +1,54 @@
 package doctor
+
+import (
+	"fmt"
+
+	"github.com/GandarfHSE/dentistryBackend/objects/user"
+	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
+	"github.com/GandarfHSE/dentistryBackend/utils/database"
+	"github.com/ansel1/merry"
+	"github.com/rs/zerolog/log"
+)
+
+// TODO - move s.Close() before err
+func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*CreateDoctorInfoResponce, merry.Error) {
+	s, err := database.GetReadWriteSession()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get write session at CreateDoctorInfoHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	defer s.Close()
+
+	user_, err, exists := user.GetUserById(s, req.Uid)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !exists {
+		return nil, merry.New(fmt.Sprintf("User with uid = %v does not exist!", req.Uid)).WithHTTPCode(400)
+	}
+	if user_.Role != user.DoctorRole {
+		return nil, merry.New(fmt.Sprintf("User with uid = %v is not doctor! Its role is %v", req.Uid, user_.Role)).WithHTTPCode(400)
+	}
+
+	err = addDoctorInfo(s, req)
+	return &CreateDoctorInfoResponce{}, nil
+}
+
+func GetDoctorInfoHandler(req GetDoctorInfoRequest, _ *cookie.Cookie) (*GetDoctorInfoResponce, merry.Error) {
+	s, err := database.GetReadSession()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get read session at GetDoctorInfoHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	defer s.Close()
+
+	doctorInfo, err, exists := getDoctorInfoByUid(s, req.Uid)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !exists {
+		return nil, merry.New(fmt.Sprintf("Doctor info about uid = %v does not exist!", req.Uid)).WithHTTPCode(400)
+	}
+
+	return &GetDoctorInfoResponce{Info: doctorInfo}, nil
+}

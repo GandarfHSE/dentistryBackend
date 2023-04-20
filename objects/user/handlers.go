@@ -21,7 +21,6 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-
 	if exists {
 		return nil, merry.New("User with this login already exists").WithHTTPCode(400)
 	}

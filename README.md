@@ -50,11 +50,29 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 Выводит список всех юзеров (доступно только для админов и разработчиков)
 - input: cookie with `jwt`
 - curl example: `curl localhost:8083/user/list -b $(cat cookie.txt)` (cookie.txt: `jwt=input_token_here`)
-- output: json with `User` array `userlist`
+- output: json with User array `userlist`
+- output example: `{"userlist":[{"id":1,"login":"kek","password":"7c5549bc580261e8c7b68655df72a857","role":4},{"id":2,"login":"kek1","password":"7c5549bc580261e8c7b68655df72a857","role":1}]}`
 
 Кидает `401`, если нет куки.
 
 Кидает `403`, если роль юзера не админ и не разработчик.
+
+## /doctor/create
+Добавить информацию про врача
+- input: json
+- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `post` (должность), int `exp` (типа experience - стаж работы в годах)
+- curl example: `curl localhost:8083/doctor/create -d '{"uid":1, "name":"John Doe", "post":"Доктор крутой", "exp":42}'`
+- output: empty json
+
+Кидает `400`, если юзера с таким uid не существует или его роль не доктор
+
+## /doctor/get
+Получить информацию про врача по его uid
+- input: json
+- input format: int `uid`
+- curl example: `curl localhost:8083/doctor/get -d '{"uid":1}'`
+- output: json with DoctorInfo array `info`
+- output example: `{"info":{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42}}`
 
 ## /service/create
 - input: json

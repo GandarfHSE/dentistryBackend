@@ -17,14 +17,8 @@ func addUser(s *database.Session, req CreateUserRequest) error {
 	return err
 }
 
-func getUserByLogin(s *database.Session, login string) (User, error, bool) {
-	q := `
-		SELECT *
-		FROM "users"
-		WHERE "login" = '%s';
-	`
-
-	users, err := database.Get[User](s, fmt.Sprintf(q, login))
+func getUser(s *database.Session, q string) (User, error, bool) {
+	users, err := database.Get[User](s, q)
 	if err != nil {
 		return User{}, err, false
 	}
@@ -36,8 +30,33 @@ func getUserByLogin(s *database.Session, login string) (User, error, bool) {
 	}
 }
 
+func getUserByLogin(s *database.Session, login string) (User, error, bool) {
+	q := `
+		SELECT *
+		FROM "users"
+		WHERE "login" = '%s';
+	`
+
+	return getUser(s, fmt.Sprintf(q, login))
+}
+
+func GetUserById(s *database.Session, uid int) (User, error, bool) {
+	q := `
+		SELECT *
+		FROM "users"
+		WHERE "id" = '%v';
+	`
+
+	return getUser(s, fmt.Sprintf(q, uid))
+}
+
 func doesUserExist(s *database.Session, login string) (bool, error) {
 	_, err, exists := getUserByLogin(s, login)
+	return exists, err
+}
+
+func DoesUserWithUidExist(s *database.Session, uid int) (bool, error) {
+	_, err, exists := GetUserById(s, uid)
 	return exists, err
 }
 
