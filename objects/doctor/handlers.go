@@ -25,6 +25,7 @@ func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*Cr
 	if !exists {
 		return nil, merry.New(fmt.Sprintf("User with uid = %v does not exist!", req.Uid)).WithHTTPCode(400)
 	}
+	// TODO: #17
 	if user_.Role != user.DoctorRole {
 		return nil, merry.New(fmt.Sprintf("User with uid = %v is not doctor! Its role is %v", req.Uid, user_.Role)).WithHTTPCode(400)
 	}

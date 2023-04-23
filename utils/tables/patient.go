@@ -6,6 +6,6 @@ var createPatientInfoTable = `
 		"id" SERIAL PRIMARY KEY,
 		"uid" INT NOT NULL,
 		"name" VARCHAR(200) NOT NULL DEFAULT 'anon',
-		"pass" VARCHAR(200) NOT NULL DEFAULT ''
+		"passport" VARCHAR(200) NOT NULL DEFAULT ''
 	);
 `

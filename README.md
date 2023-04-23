@@ -61,6 +61,27 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 ---
 
+## /patient/create
+Добавить информацию про пациента
+- input: json
+- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `passport`
+- curl example: `curl localhost:8083/patient/create -d '{"uid":1, "name":"Carl", "passport":"1234 133742"}'`
+- output: empty json
+
+Кидает `400`, если юзера с таким uid не существует или его роль не пациент
+
+## /patient/get
+Получить информацию про пациента по его uid
+- input: json
+- input format: int `uid`
+- curl example: `curl localhost:8083/patient/get -d '{"uid":1}'`
+- output: json with PatientInfo array `info`
+- output example: `{"info":{"id":1,"uid":1,"name":"Carl","passport":"1234 133742"}}`
+
+Кидает `400`, если информации про юзера с таким uid не существует
+
+---
+
 ## /doctor/create
 Добавить информацию про врача
 - input: json
@@ -77,6 +98,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - curl example: `curl localhost:8083/doctor/get -d '{"uid":1}'`
 - output: json with DoctorInfo array `info`
 - output example: `{"info":{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42}}`
+
+Кидает `400`, если информации про юзера с таким uid не существует
 
 ---
 

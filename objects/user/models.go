@@ -2,14 +2,14 @@ package user
 
 // golang doesn't have enum ¯\_(ツ)_/¯
 const (
-	ClientRole int = 1
-	DoctorRole int = 2
-	AdminRole  int = 4
-	DevRole    int = 8
+	PatientRole int = 1
+	DoctorRole  int = 2
+	AdminRole   int = 4
+	DevRole     int = 8
 )
 
 func IsRoleValid(role int) bool {
-	return role == ClientRole || role == DoctorRole || role == AdminRole || role == DevRole
+	return role == PatientRole || role == DoctorRole || role == AdminRole || role == DevRole
 }
 
 type User struct {
