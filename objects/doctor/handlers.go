@@ -52,3 +52,19 @@ func GetDoctorInfoHandler(req GetDoctorInfoRequest, _ *cookie.Cookie) (*GetDocto
 
 	return &GetDoctorInfoResponce{Info: doctorInfo}, nil
 }
+
+func FindDoctorByNameSubstrHandler(req FindDoctorByNameSubstrRequest, _ *cookie.Cookie) (*FindDoctorByNameSubstrResponse, merry.Error) {
+	s, err := database.GetReadSession()
+	defer s.Close()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get read session at FindDoctorByNameSubstrHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	doctors, err := findDoctorByNameSubstr(s, req.Name)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	return &FindDoctorByNameSubstrResponse{Result: doctors}, nil
+}

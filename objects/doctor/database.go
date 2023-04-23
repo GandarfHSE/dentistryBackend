@@ -38,3 +38,13 @@ func getDoctorInfoByUid(s *database.Session, uid int) (DoctorInfo, error, bool) 
 
 	return getDoctorInfo(s, fmt.Sprintf(q, uid))
 }
+
+func findDoctorByNameSubstr(s *database.Session, name_substring string) ([]DoctorInfo, error) {
+	q := `
+		SELECT *
+		FROM "doctors"
+		WHERE "name" ~* '%s';
+	`
+
+	return database.Get[DoctorInfo](s, fmt.Sprintf(q, name_substring))
+}

@@ -37,6 +37,8 @@ func RegisterHandlers() {
 	http.HandleFunc("/doctor/create", createDoctorInfoHandler)
 	getDoctorInfoHandler := jsonHandlerWrapper(doctor.GetDoctorInfoHandler)
 	http.HandleFunc("/doctor/get", getDoctorInfoHandler)
+	findDoctorByNameSubstrHandler := jsonHandlerWrapper(doctor.FindDoctorByNameSubstrHandler)
+	http.HandleFunc("/doctor/find/namesubstr", findDoctorByNameSubstrHandler)
 
 	// service handlers
 	createServiceHandler := jsonHandlerWrapper(service.CreateServiceHandler)

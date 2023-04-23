@@ -108,6 +108,14 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 Кидает `400`, если информации про юзера с таким uid не существует
 
+## /doctor/find/namesubstr
+Получить список врачей с именем, содержащим данную подстроку (не чувствительно к регистру)
+- input: json
+- input format: string `name` - подстрока в имени
+- curl example: `curl localhost:8083/doctor/find/namesubstr -d '{"name":"oHn"}'`
+- output: json with DoctorInfo array `result`
+- output example: `{"result":[{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42}]}`
+
 ---
 
 ## /service/create

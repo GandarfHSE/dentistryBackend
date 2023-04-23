@@ -25,3 +25,11 @@ type GetDoctorInfoRequest struct {
 type GetDoctorInfoResponce struct {
 	Info DoctorInfo `json:"info"`
 }
+
+type FindDoctorByNameSubstrRequest struct {
+	Name string `json:"name"`
+}
+
+type FindDoctorByNameSubstrResponse struct {
+	Result []DoctorInfo `json:"result"`
+}
