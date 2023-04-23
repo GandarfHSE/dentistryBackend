@@ -23,6 +23,8 @@ func RegisterHandlers() {
 	http.HandleFunc("/user/login", loginHandler)
 	getUserListHandler := noBodyHandlerWrapper(user.GetUserListHandler)
 	http.HandleFunc("/user/list", getUserListHandler)
+	whoAmIHandler := noBodyHandlerWrapper(user.WhoAmIHandler)
+	http.HandleFunc("/user/whoami", whoAmIHandler)
 
 	// patient wrappers
 	createPatientInfoHandler := jsonHandlerWrapper(patient.CreatePatientInfoHandler)

@@ -10,7 +10,6 @@ import (
 )
 
 type AuthHandlers struct {
-	// TODO: use postresql
 	jwtPrivate *rsa.PrivateKey
 	jwtPublic  *rsa.PublicKey
 }

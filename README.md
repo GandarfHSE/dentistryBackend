@@ -59,6 +59,13 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 Кидает `403`, если роль юзера не админ и не разработчик.
 
+## /user/whoami
+Отдаёт информацию о юзере по куке
+- input: cookie with `jwt`
+- curl example: `curl localhost:8083/user/whoami -b $(cat cookie.txt)` (cookie.txt: `jwt=input_token_here`)
+- output: json with int `Id`, string `Login` and int `Role`
+- output example: `{"id":1,"login":"kek","role":1}`
+
 ---
 
 ## /patient/create

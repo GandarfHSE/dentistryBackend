@@ -43,3 +43,12 @@ type GetUserListRequest struct {
 type GetUserListResponce struct {
 	UserList []User `json:"userlist"`
 }
+
+type WhoAmIRequest struct {
+}
+
+type WhoAmIResponse struct {
+	Id    int    `json:"id"`
+	Login string `json:"login"`
+	Role  int    `json:"role"`
+}

@@ -81,7 +81,7 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	// TODO: maybe do separate logic with roles?
+	// TODO: #17
 	if requester.Role != AdminRole && requester.Role != DevRole {
 		return nil, merry.New("Access denied").WithHTTPCode(403)
 	}
@@ -92,4 +92,24 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 	}
 
 	return &GetUserListResponce{UserList: userList}, nil
+}
+
+func WhoAmIHandler(req WhoAmIRequest, c *cookie.Cookie) (*WhoAmIResponse, merry.Error) {
+	if c == nil {
+		return nil, merry.New("No cookie!").WithHTTPCode(401)
+	}
+
+	s, err := database.GetReadSession()
+	defer s.Close()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get read session at GetUserListHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	requester, err, _ := getUserByLogin(s, c.Username)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	return &WhoAmIResponse{Id: requester.Id, Login: requester.Login, Role: requester.Role}, nil
 }
