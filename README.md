@@ -30,6 +30,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - output: "Hello!\n"
 - curl example: `curl localhost:8083/hello`
 
+---
+
 ## /user/create
 - input: json
 - input format: string `login`, string `password`, int `role`: 1 (пациент), 2 (доктор), 4 (админ), 8 (разработчик)
@@ -57,6 +59,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 Кидает `403`, если роль юзера не админ и не разработчик.
 
+---
+
 ## /doctor/create
 Добавить информацию про врача
 - input: json
@@ -73,6 +77,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - curl example: `curl localhost:8083/doctor/get -d '{"uid":1}'`
 - output: json with DoctorInfo array `info`
 - output example: `{"info":{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42}}`
+
+---
 
 ## /service/create
 - input: json
