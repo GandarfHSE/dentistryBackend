@@ -15,12 +15,12 @@ type CreateServiceRequest struct {
 	Duration    int    `json:"duration"`
 }
 
-type CreateServiceResponce struct {
+type CreateServiceResponse struct {
 }
 
 type GetServiceListRequest struct {
 }
 
-type GetServiceListResponce struct {
+type GetServiceListResponse struct {
 	ServiceList []Service `json:"servicelist"`
 }

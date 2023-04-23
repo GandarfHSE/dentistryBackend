@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*CreateDoctorInfoResponce, merry.Error) {
+func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*CreateDoctorInfoResponse, merry.Error) {
 	s, err := database.GetReadWriteSession()
 	defer s.Close()
 	if err != nil {
@@ -31,10 +31,10 @@ func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*Cr
 	}
 
 	err = addDoctorInfo(s, req)
-	return &CreateDoctorInfoResponce{}, nil
+	return &CreateDoctorInfoResponse{}, nil
 }
 
-func GetDoctorInfoHandler(req GetDoctorInfoRequest, _ *cookie.Cookie) (*GetDoctorInfoResponce, merry.Error) {
+func GetDoctorInfoHandler(req GetDoctorInfoRequest, _ *cookie.Cookie) (*GetDoctorInfoResponse, merry.Error) {
 	s, err := database.GetReadSession()
 	defer s.Close()
 	if err != nil {
@@ -50,7 +50,7 @@ func GetDoctorInfoHandler(req GetDoctorInfoRequest, _ *cookie.Cookie) (*GetDocto
 		return nil, merry.New(fmt.Sprintf("Doctor info about uid = %v does not exist!", req.Uid)).WithHTTPCode(400)
 	}
 
-	return &GetDoctorInfoResponce{Info: doctorInfo}, nil
+	return &GetDoctorInfoResponse{Info: doctorInfo}, nil
 }
 
 func FindDoctorByNameSubstrHandler(req FindDoctorByNameSubstrRequest, _ *cookie.Cookie) (*FindDoctorByNameSubstrResponse, merry.Error) {

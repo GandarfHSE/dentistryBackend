@@ -33,14 +33,14 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-type LoginResponce struct {
+type LoginResponse struct {
 	JWT string `json:"jwt"`
 }
 
 type GetUserListRequest struct {
 }
 
-type GetUserListResponce struct {
+type GetUserListResponse struct {
 	UserList []User `json:"userlist"`
 }
 

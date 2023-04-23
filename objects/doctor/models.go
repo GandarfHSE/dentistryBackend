@@ -15,14 +15,14 @@ type CreateDoctorInfoRequest struct {
 	Exp  int    `json:"exp"`
 }
 
-type CreateDoctorInfoResponce struct {
+type CreateDoctorInfoResponse struct {
 }
 
 type GetDoctorInfoRequest struct {
 	Uid int `json:"uid"`
 }
 
-type GetDoctorInfoResponce struct {
+type GetDoctorInfoResponse struct {
 	Info DoctorInfo `json:"info"`
 }
 

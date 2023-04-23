@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func CreateServiceHandler(req CreateServiceRequest, _ *cookie.Cookie) (*CreateServiceResponce, merry.Error) {
+func CreateServiceHandler(req CreateServiceRequest, _ *cookie.Cookie) (*CreateServiceResponse, merry.Error) {
 	s, err := database.GetReadWriteSession()
 	defer s.Close()
 	if err != nil {
@@ -31,10 +31,10 @@ func CreateServiceHandler(req CreateServiceRequest, _ *cookie.Cookie) (*CreateSe
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &CreateServiceResponce{}, nil
+	return &CreateServiceResponse{}, nil
 }
 
-func GetServiceListHandler(req GetServiceListRequest, _ *cookie.Cookie) (*GetServiceListResponce, merry.Error) {
+func GetServiceListHandler(req GetServiceListRequest, _ *cookie.Cookie) (*GetServiceListResponse, merry.Error) {
 	s, err := database.GetReadSession()
 	defer s.Close()
 	if err != nil {
@@ -48,5 +48,5 @@ func GetServiceListHandler(req GetServiceListRequest, _ *cookie.Cookie) (*GetSer
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &GetServiceListResponce{ServiceList: serviceList}, nil
+	return &GetServiceListResponse{ServiceList: serviceList}, nil
 }

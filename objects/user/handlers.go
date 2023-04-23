@@ -35,7 +35,7 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 	return &CreateUserResponse{}, nil
 }
 
-func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Error) {
+func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponse, merry.Error) {
 	s, err := database.GetReadSession()
 	defer s.Close()
 	if err != nil {
@@ -62,10 +62,10 @@ func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponce, merry.Err
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &LoginResponce{JWT: token}, nil
+	return &LoginResponse{JWT: token}, nil
 }
 
-func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListResponce, merry.Error) {
+func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListResponse, merry.Error) {
 	if c == nil {
 		return nil, merry.New("No cookie!").WithHTTPCode(401)
 	}
@@ -91,7 +91,7 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &GetUserListResponce{UserList: userList}, nil
+	return &GetUserListResponse{UserList: userList}, nil
 }
 
 func WhoAmIHandler(req WhoAmIRequest, c *cookie.Cookie) (*WhoAmIResponse, merry.Error) {
