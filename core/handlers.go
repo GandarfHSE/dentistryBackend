@@ -3,6 +3,7 @@ package core
 import (
 	"net/http"
 
+	"github.com/GandarfHSE/dentistryBackend/objects/appointment"
 	"github.com/GandarfHSE/dentistryBackend/objects/doctor"
 	"github.com/GandarfHSE/dentistryBackend/objects/patient"
 	"github.com/GandarfHSE/dentistryBackend/objects/service"
@@ -45,4 +46,14 @@ func RegisterHandlers() {
 	http.HandleFunc("/service/create", createServiceHandler)
 	getServiceListHandler := noBodyHandlerWrapper(service.GetServiceListHandler)
 	http.HandleFunc("/service/list", getServiceListHandler)
+
+	// appointment handlers
+	createAppointmentHandler := jsonHandlerWrapper(appointment.CreateAppointmentHandler)
+	http.HandleFunc("/appointment/create/default", createAppointmentHandler)
+	createAppointmentPatientHandler := jsonHandlerWrapper(appointment.CreateAppointmentPatientHandler)
+	http.HandleFunc("/appointment/create/patient", createAppointmentPatientHandler)
+	createAppointmentDoctorHandler := jsonHandlerWrapper(appointment.CreateAppointmentDoctorHandler)
+	http.HandleFunc("/appointment/create/doctor", createAppointmentDoctorHandler)
+	getAppointmentByIdHandler := jsonHandlerWrapper(appointment.GetAppointmentByIdHandler)
+	http.HandleFunc("/appointment/get", getAppointmentByIdHandler)
 }

@@ -7,6 +7,7 @@ var createAppointmentTable = `
 		"pid" INT NOT NULL,
 		"did" INT NOT NULL,
 		"sid" INT NOT NULL,
-		"time" TIMESTAMP NOT NULL
+		"timebegin" TIMESTAMP NOT NULL,
+		"timeend" TIMESTAMP NOT NULL
 	);
 `

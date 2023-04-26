@@ -30,7 +30,7 @@ func getUser(s *database.Session, q string) (User, error, bool) {
 	}
 }
 
-func getUserByLogin(s *database.Session, login string) (User, error, bool) {
+func GetUserByLogin(s *database.Session, login string) (User, error, bool) {
 	q := `
 		SELECT *
 		FROM "users"
@@ -50,8 +50,8 @@ func GetUserById(s *database.Session, uid int) (User, error, bool) {
 	return getUser(s, fmt.Sprintf(q, uid))
 }
 
-func doesUserExist(s *database.Session, login string) (bool, error) {
-	_, err, exists := getUserByLogin(s, login)
+func DoesUserExist(s *database.Session, login string) (bool, error) {
+	_, err, exists := GetUserByLogin(s, login)
 	return exists, err
 }
 

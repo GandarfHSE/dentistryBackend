@@ -17,7 +17,7 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	exists, err := doesUserExist(s, req.Login)
+	exists, err := DoesUserExist(s, req.Login)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
@@ -43,7 +43,7 @@ func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponse, merry.Err
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	user, err, exists := getUserByLogin(s, req.Login)
+	user, err, exists := GetUserByLogin(s, req.Login)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
@@ -77,7 +77,7 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	requester, err, _ := getUserByLogin(s, c.Username)
+	requester, err, _ := GetUserByLogin(s, c.Username)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
@@ -106,7 +106,7 @@ func WhoAmIHandler(req WhoAmIRequest, c *cookie.Cookie) (*WhoAmIResponse, merry.
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	requester, err, _ := getUserByLogin(s, c.Username)
+	requester, err, _ := GetUserByLogin(s, c.Username)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}

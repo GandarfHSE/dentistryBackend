@@ -20,8 +20,7 @@ func addService(s *database.Session, req CreateServiceRequest) error {
 	return database.Modify(s, fmt.Sprintf(q, req.Name, req.Description, req.Cost, req.Duration))
 }
 
-// TODO: SELECT (id, name, description, cost, duration) does not work for some reason
-// figure out why
+// TODO: #12
 func getServiceByName(s *database.Session, name string) (Service, error, bool) {
 	q := `
 		SELECT *
@@ -30,6 +29,25 @@ func getServiceByName(s *database.Session, name string) (Service, error, bool) {
 	`
 
 	services, err := database.Get[Service](s, fmt.Sprintf(q, name))
+	if err != nil {
+		return Service{}, err, false
+	}
+
+	if len(services) > 0 {
+		return services[0], nil, true
+	} else {
+		return Service{}, nil, false
+	}
+}
+
+func GetServiceById(s *database.Session, id int) (Service, error, bool) {
+	q := `
+		SELECT *
+		FROM "services"
+		WHERE "id" = %d;
+	`
+
+	services, err := database.Get[Service](s, fmt.Sprintf(q, id))
 	if err != nil {
 		return Service{}, err, false
 	}

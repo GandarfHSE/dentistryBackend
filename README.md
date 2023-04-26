@@ -131,3 +131,46 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: None
 - curl example: `curl localhost:8083/service/list`
 - output: json with `Service` array `servicelist`
+
+---
+
+## /appointment/create/default
+Создаёт запись на услугу
+- input: json
+- input format: int `pid` (айдишник пациента из таблицы `users`), int `did` (айдишник доктора из таблицы `users`), int `sid` (айдишник услуги из таблицы `services`), string `time` (время начала приёма в формате ISO8601)
+- curl example: `curl localhost:8083/appointment/create/default -d '{"pid":1, "did":2, "sid":1, "time":"2020-12-09T16:10:53Z"}'`
+- output: empty json
+
+Кидает `400`, если юзеров с айди `pid` и `did` не существует.
+
+Кидает `403`, если у юзеров неправильные роли (у пациента не пациент, у доктора не доктор)
+
+Кидает `409`, если услуга не может быть создана (например, это время занято другой услугой)
+
+## /appointment/create/patient
+Создаёт запись на услугу от лица пациента
+- input: json and cookie
+- input format: int `did`, int `sid`, string `time`
+- curl example: `curl localhost:8083/appointment/create/patient -d '{"did":2, "sid":1, "time":"2020-12-09T16:10:53Z"}' -b $(cat cookie.txt)`
+- output: empty json
+
+Кидает ошибки выше + `401`, если куки нет
+
+## /appointment/create/doctor
+Создаёт запись на услугу от лица доктора
+- input: json and cookie
+- input format: int `pid`, int `sid`, string `time`
+- curl example: `curl localhost:8083/appointment/create/doctor -d '{"pid":1, "sid":1, "time":"2020-12-09T16:10:53Z"}' -b $(cat cookie.txt)`
+- output: empty json
+
+Кидает ошибки выше + `401`, если куки нет
+
+## /appointment/get
+Получить запись по айдишнику записи
+- input: json
+- input format: int `id`
+- curl example: `curl localhost:8083/appointment/get -d '{"id":1}'`
+- output: json with Appointment `appointment`
+- output example: `{"appointment":{"id":1,"pid":1,"did":2,"sid":1,"timebegin":"2020-12-09T16:10:53Z","timeend":"2020-12-09T16:52:53Z"}}`
+
+Кидает `400`, если записи с таким айди нет
