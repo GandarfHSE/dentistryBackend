@@ -1,17 +1,5 @@
 package user
 
-// golang doesn't have enum ¯\_(ツ)_/¯
-const (
-	PatientRole int = 1
-	DoctorRole  int = 2
-	AdminRole   int = 4
-	DevRole     int = 8
-)
-
-func IsRoleValid(role int) bool {
-	return role == PatientRole || role == DoctorRole || role == AdminRole || role == DevRole
-}
-
 type User struct {
 	Id       int    `json:"id"`
 	Login    string `json:"login"`

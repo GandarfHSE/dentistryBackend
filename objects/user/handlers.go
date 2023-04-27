@@ -5,6 +5,7 @@ import (
 	"github.com/GandarfHSE/dentistryBackend/utils/algo"
 	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
+	"github.com/GandarfHSE/dentistryBackend/utils/role"
 	"github.com/ansel1/merry"
 	"github.com/rs/zerolog/log"
 )
@@ -24,7 +25,7 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 	if exists {
 		return nil, merry.New("User with this login already exists").WithHTTPCode(400)
 	}
-	if !IsRoleValid(req.Role) {
+	if !role.IsRoleValid(req.Role) {
 		return nil, merry.New("Invalid role").WithHTTPCode(400)
 	}
 
@@ -77,12 +78,11 @@ func GetUserListHandler(req GetUserListRequest, c *cookie.Cookie) (*GetUserListR
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	requester, err, _ := GetUserByLogin(s, c.Username)
+	req_role, err := GetRoleFromCookie(s, c)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	// TODO: #17
-	if requester.Role != AdminRole && requester.Role != DevRole {
+	if !role.IsRoleAtLeast(req_role, role.Admin) {
 		return nil, merry.New("Access denied").WithHTTPCode(403)
 	}
 

@@ -141,7 +141,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - curl example: `curl localhost:8083/appointment/create/default -d '{"pid":1, "did":2, "sid":1, "time":"2020-12-09T16:10:53Z"}'`
 - output: empty json
 
-Кидает `400`, если юзеров с айди `pid` и `did` не существует.
+Кидает `400`, если юзеров с айди `pid` и `did` не существует или услуги с айди `sid` не существует.
 
 Кидает `403`, если у юзеров неправильные роли (у пациента не пациент, у доктора не доктор)
 

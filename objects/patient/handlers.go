@@ -6,6 +6,7 @@ import (
 	"github.com/GandarfHSE/dentistryBackend/objects/user"
 	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
+	"github.com/GandarfHSE/dentistryBackend/utils/role"
 	"github.com/ansel1/merry"
 	"github.com/rs/zerolog/log"
 )
@@ -18,16 +19,12 @@ func CreatePatientInfoHandler(req CreatePatientInfoRequest, _ *cookie.Cookie) (*
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	user_, err, exists := user.GetUserById(s, req.Uid)
+	is_role_correct, err := user.CheckUserRole(s, req.Uid, role.Patient)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
-	if !exists {
-		return nil, merry.New(fmt.Sprintf("User with uid = %v does not exist!", req.Uid)).WithHTTPCode(400)
-	}
-	// TODO: #17
-	if user_.Role != user.PatientRole {
-		return nil, merry.New(fmt.Sprintf("User with uid = %v is not patient! Its role is %v", req.Uid, user_.Role)).WithHTTPCode(400)
+	if !is_role_correct {
+		return nil, merry.New(fmt.Sprintf("User's role with uid = %d is not patient!", req.Uid)).WithHTTPCode(400)
 	}
 
 	err = addPatientInfo(s, req)

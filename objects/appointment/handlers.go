@@ -2,16 +2,59 @@ package appointment
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/GandarfHSE/dentistryBackend/objects/service"
 	"github.com/GandarfHSE/dentistryBackend/objects/user"
 	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
+	"github.com/GandarfHSE/dentistryBackend/utils/role"
 	"github.com/ansel1/merry"
 	"github.com/rs/zerolog/log"
 )
 
-// TODO: remove copypaste
-// TODO: check pid and did roles
+func createAppointment(s *database.Session, pid int, did int, sid int, t time.Time) merry.Error {
+	is_role_correct, err := user.CheckUserRole(s, pid, role.Patient)
+	if err != nil {
+		return merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !is_role_correct {
+		return merry.New(fmt.Sprintf("User's role with uid = %d is not patient!", pid)).WithHTTPCode(400)
+	}
+
+	is_role_correct, err = user.CheckUserRole(s, did, role.Doctor)
+	if err != nil {
+		return merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !is_role_correct {
+		return merry.New(fmt.Sprintf("User's role with uid = %d is not doctor!", did)).WithHTTPCode(400)
+	}
+
+	exist, err := service.IsServiceExist(s, sid)
+	if !exist {
+		return merry.New(fmt.Sprintf("Service with sid = %d does not exist!", sid)).WithHTTPCode(400)
+	}
+
+	tend, err := service.GetServiceEndpoint(s, t, sid)
+	if err != nil {
+		return merry.Wrap(err).WithHTTPCode(500)
+	}
+	canCreate, err := canCreateAppointment(s, did, t, tend)
+	if err != nil {
+		return merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !canCreate {
+		return merry.New("Can't create an appointment!").WithHTTPCode(409)
+	}
+
+	err = createAppointmentDB(s, pid, did, sid, t, tend)
+	if err != nil {
+		return merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	return nil
+}
+
 func CreateAppointmentHandler(req CreateAppointmentRequest, _ *cookie.Cookie) (*CreateAppointmentResponse, merry.Error) {
 	s, err := database.GetReadWriteSession()
 	defer s.Close()
@@ -20,21 +63,9 @@ func CreateAppointmentHandler(req CreateAppointmentRequest, _ *cookie.Cookie) (*
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	tend, err := getServiceEndpoint(s, req.Time, req.Sid)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
-	}
-	canCreate, err := canCreateAppointment(s, req.Did, req.Time, tend)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
-	}
-	if !canCreate {
-		return nil, merry.New("Can't create an appointment!").WithHTTPCode(409)
-	}
-
-	err = createAppointment(s, req.Pid, req.Did, req.Sid, req.Time, tend)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
+	merr := createAppointment(s, req.Pid, req.Did, req.Sid, req.Time)
+	if merr != nil {
+		return nil, merr
 	}
 
 	return &CreateAppointmentResponse{}, nil
@@ -59,26 +90,10 @@ func CreateAppointmentPatientHandler(req CreateAppointmentPatientRequest, c *coo
 	if !exist {
 		return nil, merry.New(fmt.Sprintf("User with login %s does not exist!", c.Username)).WithHTTPCode(400)
 	}
-	// TODO: #17
-	if user_.Role != user.PatientRole {
-		return nil, merry.New("You are not a patient!").WithHTTPCode(403)
-	}
 
-	tend, err := getServiceEndpoint(s, req.Time, req.Sid)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
-	}
-	canCreate, err := canCreateAppointment(s, req.Did, req.Time, tend)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
-	}
-	if !canCreate {
-		return nil, merry.New("Can't create an appointment!").WithHTTPCode(409)
-	}
-
-	err = createAppointment(s, user_.Id, req.Did, req.Sid, req.Time, tend)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
+	merr := createAppointment(s, user_.Id, req.Did, req.Sid, req.Time)
+	if merr != nil {
+		return nil, merr
 	}
 
 	return &CreateAppointmentResponse{}, nil
@@ -103,26 +118,10 @@ func CreateAppointmentDoctorHandler(req CreateAppointmentDoctorRequest, c *cooki
 	if !exist {
 		return nil, merry.New(fmt.Sprintf("User with login %s does not exist!", c.Username)).WithHTTPCode(400)
 	}
-	// TODO: #17
-	if user_.Role != user.DoctorRole {
-		return nil, merry.New("You are not a doctor!").WithHTTPCode(403)
-	}
 
-	tend, err := getServiceEndpoint(s, req.Time, req.Sid)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
-	}
-	canCreate, err := canCreateAppointment(s, user_.Role, req.Time, tend)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
-	}
-	if !canCreate {
-		return nil, merry.New("Can't create an appointment!").WithHTTPCode(409)
-	}
-
-	err = createAppointment(s, req.Pid, user_.Id, req.Sid, req.Time, tend)
-	if err != nil {
-		return nil, merry.Wrap(err).WithHTTPCode(500)
+	merr := createAppointment(s, req.Pid, user_.Id, req.Sid, req.Time)
+	if merr != nil {
+		return nil, merr
 	}
 
 	return &CreateAppointmentResponse{}, nil

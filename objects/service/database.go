@@ -2,8 +2,10 @@ package service
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
+	"github.com/ansel1/merry"
 )
 
 func doesServiceExistByName(s *database.Session, name string) (bool, error) {
@@ -59,6 +61,11 @@ func GetServiceById(s *database.Session, id int) (Service, error, bool) {
 	}
 }
 
+func IsServiceExist(s *database.Session, id int) (bool, error) {
+	_, err, exist := GetServiceById(s, id)
+	return exist, err
+}
+
 func getServiceList(s *database.Session) ([]Service, error) {
 	q := `
 		SELECT *
@@ -66,4 +73,16 @@ func getServiceList(s *database.Session) ([]Service, error) {
 	`
 
 	return database.Get[Service](s, q)
+}
+
+func GetServiceEndpoint(s *database.Session, tbegin time.Time, sid int) (time.Time, error) {
+	serv, err, exist := GetServiceById(s, sid)
+	if err != nil {
+		return time.Time{}, err
+	}
+	if !exist {
+		return time.Time{}, merry.New("Service does not exist!")
+	}
+
+	return tbegin.Add(time.Minute * time.Duration(serv.Duration)), nil
 }

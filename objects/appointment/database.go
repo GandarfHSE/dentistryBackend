@@ -3,16 +3,14 @@ package appointment
 import (
 	"time"
 
-	"github.com/GandarfHSE/dentistryBackend/objects/service"
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
-	"github.com/ansel1/merry/v2"
 )
 
 func timeFormat(t time.Time) string {
 	return t.UTC().Format("2006-01-02 15:04:05")
 }
 
-func createAppointment(s *database.Session, pid int, did int, sid int, t1 time.Time, t2 time.Time) error {
+func createAppointmentDB(s *database.Session, pid int, did int, sid int, t1 time.Time, t2 time.Time) error {
 	q := `
 		INSERT INTO "appointments" (pid, did, sid, timebegin, timeend)
 		VALUES ($1, $2, $3, $4, $5);
@@ -39,18 +37,6 @@ func getAppointmentsWithDoctorBetween(s *database.Session, did int, t1 time.Time
 func canCreateAppointment(s *database.Session, did int, t1 time.Time, t2 time.Time) (bool, error) {
 	apps, err := getAppointmentsWithDoctorBetween(s, did, t1, t2)
 	return apps == nil, err
-}
-
-func getServiceEndpoint(s *database.Session, tbegin time.Time, sid int) (time.Time, error) {
-	serv, err, exist := service.GetServiceById(s, sid)
-	if err != nil {
-		return time.Time{}, err
-	}
-	if !exist {
-		return time.Time{}, merry.New("Service does not exist!")
-	}
-
-	return tbegin.Add(time.Minute * time.Duration(serv.Duration)), nil
 }
 
 func getAppointmentById(s *database.Session, id int) (Appointment, error, bool) {
