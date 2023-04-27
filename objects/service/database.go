@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
@@ -16,10 +15,10 @@ func doesServiceExistByName(s *database.Session, name string) (bool, error) {
 func addService(s *database.Session, req CreateServiceRequest) error {
 	q := `
 		INSERT INTO "services" (name, description, cost, duration)
-		VALUES ('%s', '%s', %d, %d);
+		VALUES ($1, $2, $3, $4);
 	`
 
-	return database.Modify(s, fmt.Sprintf(q, req.Name, req.Description, req.Cost, req.Duration))
+	return database.Modify(s, q, req.Name, req.Description, req.Cost, req.Duration)
 }
 
 // TODO: #12
@@ -27,10 +26,10 @@ func getServiceByName(s *database.Session, name string) (Service, error, bool) {
 	q := `
 		SELECT *
 		FROM "services"
-		WHERE "name" = '%s';
+		WHERE "name" = $1;
 	`
 
-	services, err := database.Get[Service](s, fmt.Sprintf(q, name))
+	services, err := database.Get[Service](s, q, name)
 	if err != nil {
 		return Service{}, err, false
 	}
@@ -46,10 +45,10 @@ func GetServiceById(s *database.Session, id int) (Service, error, bool) {
 	q := `
 		SELECT *
 		FROM "services"
-		WHERE "id" = %d;
+		WHERE "id" = $1;
 	`
 
-	services, err := database.Get[Service](s, fmt.Sprintf(q, id))
+	services, err := database.Get[Service](s, q, id)
 	if err != nil {
 		return Service{}, err, false
 	}

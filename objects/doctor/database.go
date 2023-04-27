@@ -9,10 +9,10 @@ import (
 func addDoctorInfo(s *database.Session, req CreateDoctorInfoRequest) error {
 	q := `
 		INSERT INTO "doctors" (uid, name, post, exp)
-		VALUES (%d, '%s', '%s', %d);
+		VALUES ($1, $2, $3, $4);
 	`
 
-	err := database.Modify(s, fmt.Sprintf(q, req.Uid, req.Name, req.Post, req.Exp))
+	err := database.Modify(s, q, req.Uid, req.Name, req.Post, req.Exp)
 	return err
 }
 
@@ -33,7 +33,7 @@ func getDoctorInfoByUid(s *database.Session, uid int) (DoctorInfo, error, bool) 
 	q := `
 		SELECT *
 		FROM "doctors"
-		WHERE "uid" = '%v';
+		WHERE "uid" = %d;
 	`
 
 	return getDoctorInfo(s, fmt.Sprintf(q, uid))
@@ -43,8 +43,8 @@ func findDoctorByNameSubstr(s *database.Session, name_substring string) ([]Docto
 	q := `
 		SELECT *
 		FROM "doctors"
-		WHERE "name" ~* '%s';
+		WHERE "name" ~* $1;
 	`
 
-	return database.Get[DoctorInfo](s, fmt.Sprintf(q, name_substring))
+	return database.Get[DoctorInfo](s, q, name_substring)
 }

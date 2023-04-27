@@ -13,10 +13,10 @@ import (
 func addUser(s *database.Session, req CreateUserRequest) error {
 	q := `
 		INSERT INTO "users" (login, password, role)
-		VALUES ('%s', '%s', %d);
+		VALUES ($1, $2, $3);
 	`
 
-	err := database.Modify(s, fmt.Sprintf(q, req.Login, algo.GenerateEncodedPassword(req.Password), req.Role))
+	err := database.Modify(s, q, req.Login, algo.GenerateEncodedPassword(req.Password), req.Role)
 	return err
 }
 
