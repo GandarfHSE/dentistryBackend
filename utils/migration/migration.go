@@ -2,7 +2,6 @@ package migration
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/cli"
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
@@ -49,15 +48,13 @@ func dropDatabase() error {
 func MakeHardMigration() {
 	err := dropDatabase()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't drop tables for hard migration!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't drop tables for hard migration!")
 	}
 
 	s, err := database.GetReadWriteSession()
 	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get write session for hard migration!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't get write session for hard migration!")
 	}
 
 	for version := range tables.TableVersions {
@@ -71,8 +68,7 @@ func MakeSoftMigration() {
 	s, err := database.GetReadWriteSession()
 	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get write session for soft migration!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't get write session for soft migration!")
 	}
 
 	ver := getVersion(s)

@@ -2,7 +2,6 @@ package migration
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
 	"github.com/rs/zerolog/log"
@@ -21,8 +20,7 @@ func createVersionTable(s *database.Session) {
 
 	err := database.Modify(s, q)
 	if err != nil {
-		log.Error().Err(err).Msg("Can't create version table!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't create version table!")
 	}
 }
 
@@ -34,12 +32,10 @@ func getVersion(s *database.Session) int {
 
 	vs, err := database.Get[ver](s, q)
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get database version in getVersion!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't get database version in getVersion!")
 	}
 	if len(vs) != 1 {
-		log.Error().Msg(fmt.Sprintf("getVersion: len(vs) == %v, but must equal to 1!", len(vs)))
-		os.Exit(1)
+		log.Fatal().Msg(fmt.Sprintf("getVersion: len(vs) == %v, but must equal to 1!", len(vs)))
 	}
 
 	return vs[0].Version
@@ -53,8 +49,7 @@ func setVersion(s *database.Session, v int) {
 
 	err := database.Modify(s, q)
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get truncate version table!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't get truncate version table!")
 	}
 
 	q = `
@@ -63,7 +58,6 @@ func setVersion(s *database.Session, v int) {
 	`
 	err = database.Modify(s, q, v)
 	if err != nil {
-		log.Error().Err(err).Msg("Can't set new version!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't set new version!")
 	}
 }

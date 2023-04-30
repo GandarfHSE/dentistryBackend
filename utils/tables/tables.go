@@ -2,7 +2,6 @@ package tables
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
 	"github.com/rs/zerolog/log"
@@ -19,7 +18,6 @@ var TableVersions = []string{
 func ApplyVersion(version int, s *database.Session) {
 	err := database.Modify(s, TableVersions[version])
 	if err != nil {
-		log.Error().Err(err).Msg(fmt.Sprintf("Error while applying version %d!", version))
-		os.Exit(1)
+		log.Fatal().Err(err).Msg(fmt.Sprintf("Error while applying version %d!", version))
 	}
 }

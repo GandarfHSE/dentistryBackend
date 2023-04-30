@@ -29,15 +29,13 @@ func ParseArgs() {
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Error().Err(err).Msg("Can't parse command line args!")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Can't parse command line args!")
 	}
 }
 
 func GetDoHardMigrationFlag() bool {
 	if _CLIArgs == nil {
-		log.Error().Msg("Getting DoHardMigration flags, but flags have not been parsed!")
-		os.Exit(1)
+		log.Fatal().Msg("Getting DoHardMigration flags, but flags have not been parsed!")
 	}
 	return _CLIArgs.DoHardMigration
 }
