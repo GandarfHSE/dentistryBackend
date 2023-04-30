@@ -46,12 +46,14 @@ func dropDatabase() error {
 }
 
 func MakeFullMigration() {
-	if err := dropDatabase(); err != nil {
+	err := dropDatabase()
+	if err != nil {
 		log.Error().Err(err).Msg("Can't drop tables for full migration!")
 		os.Exit(1)
 	}
 
 	s, err := database.GetReadWriteSession()
+	defer s.Close()
 	if err != nil {
 		log.Error().Err(err).Msg("Can't get write session for full migration!")
 		os.Exit(1)
@@ -60,10 +62,23 @@ func MakeFullMigration() {
 	for version := range tables.TableVersions {
 		tables.ApplyVersion(version, s)
 	}
+	createVersionTable(s)
+	setVersion(s, len(tables.TableVersions)-1)
+}
 
-	err = s.Close()
+func MakeUpdateMigration() {
+	s, err := database.GetReadWriteSession()
+	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't close write session for full migration!")
+		log.Error().Err(err).Msg("Can't get write session for migrate migration!")
 		os.Exit(1)
 	}
+
+	ver := getVersion(s)
+	for version := range tables.TableVersions {
+		if version > ver {
+			tables.ApplyVersion(version, s)
+		}
+	}
+	setVersion(s, len(tables.TableVersions)-1)
 }
