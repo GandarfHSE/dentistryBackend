@@ -13,9 +13,14 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - Создайте базу данных `test_dent_db` и [установите пароль](https://stackoverflow.com/questions/12720967/how-can-i-change-a-postgresql-user-password) `postgres` на юзера `postgres` (конфигурируется [тут](https://github.com/GandarfHSE/dentistryBackend/blob/main/utils/config/config.json)), базовые команды psql [тут](https://www.postgresqltutorial.com/postgresql-administration/psql-commands/)
 - Перейдите в папку `main`
 - Выполните `go build`
-- Выполните `./main`
+- Выполните `./main --hard` (для первого запуска, для последующих `./main`)
 
 Прибить можно с помощью `Ctrl + C`
+
+# CLI
+
+### --hard
+Дропает и пересоздаёт все таблицы. Все данные, находящиеся в БД, будут удалены.
 
 # API
 

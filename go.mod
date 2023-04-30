@@ -23,6 +23,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.14.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.18.10 // indirect
 	github.com/aws/smithy-go v1.13.5 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/georgysavva/scany v1.2.1 // indirect
 	github.com/georgysavva/scany/v2 v2.0.0 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
@@ -40,6 +41,9 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/rs/zerolog v1.29.0 // indirect
+	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/urfave/cli/v2 v2.25.1 // indirect
+	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.6.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect

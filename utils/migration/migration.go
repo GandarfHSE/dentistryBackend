@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/GandarfHSE/dentistryBackend/utils/cli"
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
 	"github.com/GandarfHSE/dentistryBackend/utils/tables"
 	"github.com/rs/zerolog/log"
@@ -45,17 +46,17 @@ func dropDatabase() error {
 	return s.Close()
 }
 
-func MakeFullMigration() {
+func MakeHardMigration() {
 	err := dropDatabase()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't drop tables for full migration!")
+		log.Error().Err(err).Msg("Can't drop tables for hard migration!")
 		os.Exit(1)
 	}
 
 	s, err := database.GetReadWriteSession()
 	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get write session for full migration!")
+		log.Error().Err(err).Msg("Can't get write session for hard migration!")
 		os.Exit(1)
 	}
 
@@ -66,11 +67,11 @@ func MakeFullMigration() {
 	setVersion(s, len(tables.TableVersions)-1)
 }
 
-func MakeUpdateMigration() {
+func MakeSoftMigration() {
 	s, err := database.GetReadWriteSession()
 	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get write session for migrate migration!")
+		log.Error().Err(err).Msg("Can't get write session for soft migration!")
 		os.Exit(1)
 	}
 
@@ -81,4 +82,14 @@ func MakeUpdateMigration() {
 		}
 	}
 	setVersion(s, len(tables.TableVersions)-1)
+}
+
+func MakeMigration() {
+	if cli.GetDoHardMigrationFlag() {
+		log.Info().Msg("Making hard migration...")
+		MakeHardMigration()
+	} else {
+		log.Info().Msg("Making soft migration...")
+		MakeSoftMigration()
+	}
 }
