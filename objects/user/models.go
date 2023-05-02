@@ -13,7 +13,9 @@ type CreateUserRequest struct {
 	Role     int    `json:"role"`
 }
 
+// check README: empty json in response
 type CreateUserResponse struct {
+	Err string `json:"err"`
 }
 
 type LoginRequest struct {

@@ -33,7 +33,7 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &CreateUserResponse{}, nil
+	return &CreateUserResponse{Err: "-"}, nil
 }
 
 func LoginHandler(req LoginRequest, _ *cookie.Cookie) (*LoginResponse, merry.Error) {

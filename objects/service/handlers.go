@@ -31,7 +31,7 @@ func CreateServiceHandler(req CreateServiceRequest, _ *cookie.Cookie) (*CreateSe
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &CreateServiceResponse{}, nil
+	return &CreateServiceResponse{Err: "-"}, nil
 }
 
 func GetServiceListHandler(req GetServiceListRequest, _ *cookie.Cookie) (*GetServiceListResponse, merry.Error) {

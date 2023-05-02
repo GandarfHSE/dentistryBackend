@@ -15,7 +15,9 @@ type CreateServiceRequest struct {
 	Duration    int    `json:"duration"`
 }
 
+// check README: empty json in response
 type CreateServiceResponse struct {
+	Err string `json:"err"`
 }
 
 type GetServiceListRequest struct {

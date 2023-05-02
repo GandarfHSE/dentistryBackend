@@ -68,7 +68,7 @@ func CreateAppointmentHandler(req CreateAppointmentRequest, _ *cookie.Cookie) (*
 		return nil, merr
 	}
 
-	return &CreateAppointmentResponse{}, nil
+	return &CreateAppointmentResponse{Err: "-"}, nil
 }
 
 func CreateAppointmentPatientHandler(req CreateAppointmentPatientRequest, c *cookie.Cookie) (*CreateAppointmentResponse, merry.Error) {
@@ -96,7 +96,7 @@ func CreateAppointmentPatientHandler(req CreateAppointmentPatientRequest, c *coo
 		return nil, merr
 	}
 
-	return &CreateAppointmentResponse{}, nil
+	return &CreateAppointmentResponse{Err: "-"}, nil
 }
 
 func CreateAppointmentDoctorHandler(req CreateAppointmentDoctorRequest, c *cookie.Cookie) (*CreateAppointmentResponse, merry.Error) {
@@ -124,7 +124,7 @@ func CreateAppointmentDoctorHandler(req CreateAppointmentDoctorRequest, c *cooki
 		return nil, merr
 	}
 
-	return &CreateAppointmentResponse{}, nil
+	return &CreateAppointmentResponse{Err: "-"}, nil
 }
 
 func GetAppointmentByIdHandler(req GetAppointmentByIdRequest, _ *cookie.Cookie) (*GetAppointmentByIdResponse, merry.Error) {

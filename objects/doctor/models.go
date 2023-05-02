@@ -15,7 +15,9 @@ type CreateDoctorInfoRequest struct {
 	Exp  int    `json:"exp"`
 }
 
+// check README: empty json in response
 type CreateDoctorInfoResponse struct {
+	Err string `json:"err"`
 }
 
 type GetDoctorInfoRequest struct {

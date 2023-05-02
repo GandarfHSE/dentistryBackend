@@ -30,7 +30,9 @@ type CreateAppointmentDoctorRequest struct {
 	Time time.Time `json:"time"`
 }
 
+// check README: empty json in response
 type CreateAppointmentResponse struct {
+	Err string `json:"err"`
 }
 
 type GetAppointmentByIdRequest struct {

@@ -28,7 +28,7 @@ func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*Cr
 	}
 
 	err = addDoctorInfo(s, req)
-	return &CreateDoctorInfoResponse{}, nil
+	return &CreateDoctorInfoResponse{Err: "-"}, nil
 }
 
 func GetDoctorInfoHandler(req GetDoctorInfoRequest, _ *cookie.Cookie) (*GetDoctorInfoResponse, merry.Error) {

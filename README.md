@@ -41,7 +41,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json
 - input format: string `login`, string `password`, int `role`: 1 (пациент), 2 (доктор), 4 (админ), 8 (разработчик)
 - curl example: `curl localhost:8083/user/create -d '{"login":"kek", "password":"lol", "role":1}'`
-- output: empty json
+- output: json with string `err` (see notes: empty json in response)
 
 Кидает `400`, если юзер существует или если роль некорректна (не 1/2/4/8).
 
@@ -99,7 +99,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json
 - input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `post` (должность), int `exp` (типа experience - стаж работы в годах)
 - curl example: `curl localhost:8083/doctor/create -d '{"uid":1, "name":"John Doe", "post":"Доктор крутой", "exp":42}'`
-- output: empty json
+- output: json with string `err` (see notes: empty json in response)
 
 Кидает `400`, если юзера с таким uid не существует или его роль не доктор
 
@@ -127,7 +127,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json
 - input format: string `name`, string `description`, int `cost`, int `duration`
 - curl example: `curl localhost:8083/service/create -d '{"name":"Чистка зубов", "description":"оч круто чистим", "cost":300, "duration":42}'`
-- output: empty json
+- output: json with string `err` (see notes: empty json in response)
 
 Кидает `400`, если услуга с таким именем существует.
 
@@ -144,7 +144,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json
 - input format: int `pid` (айдишник пациента из таблицы `users`), int `did` (айдишник доктора из таблицы `users`), int `sid` (айдишник услуги из таблицы `services`), string `time` (время начала приёма в формате ISO8601)
 - curl example: `curl localhost:8083/appointment/create/default -d '{"pid":1, "did":2, "sid":1, "time":"2020-12-09T16:10:53Z"}'`
-- output: empty json
+- output: json with string `err` (see notes: empty json in response)
 
 Кидает `400`, если юзеров с айди `pid` и `did` не существует или услуги с айди `sid` не существует.
 
@@ -157,7 +157,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json and cookie
 - input format: int `did`, int `sid`, string `time`
 - curl example: `curl localhost:8083/appointment/create/patient -d '{"did":2, "sid":1, "time":"2020-12-09T16:10:53Z"}' -b $(cat cookie.txt)`
-- output: empty json
+- output: json with string `err` (see notes: empty json in response)
 
 Кидает ошибки выше + `401`, если куки нет
 
@@ -166,7 +166,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json and cookie
 - input format: int `pid`, int `sid`, string `time`
 - curl example: `curl localhost:8083/appointment/create/doctor -d '{"pid":1, "sid":1, "time":"2020-12-09T16:10:53Z"}' -b $(cat cookie.txt)`
-- output: empty json
+- output: json with string `err` (see notes: empty json in response)
 
 Кидает ошибки выше + `401`, если куки нет
 
@@ -179,3 +179,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - output example: `{"appointment":{"id":1,"pid":1,"did":2,"sid":1,"timebegin":"2020-12-09T16:10:53Z","timeend":"2020-12-09T16:52:53Z"}}`
 
 Кидает `400`, если записи с таким айди нет
+
+# Notes
+
+### empty json in response
+Frontend application struggles with empty jsons. Send json with field `err` and dummy response instead.

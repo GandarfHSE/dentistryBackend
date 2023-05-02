@@ -13,7 +13,9 @@ type CreatePatientInfoRequest struct {
 	Passport string `json:"passport"`
 }
 
+// check README: empty json in response
 type CreatePatientInfoResponse struct {
+	Err string `json:"err"`
 }
 
 type GetPatientInfoRequest struct {
