@@ -35,6 +35,10 @@ func GetConnConfig() (*pgx.ConnConfig, error) {
 	return connConfig, nil
 }
 
+func GetS3Config() *S3Config {
+	return &config.S3Config
+}
+
 // TODO - move it
 func GetAbsPrivatePath() (string, error) {
 	authConfig := GetAuthConfig()

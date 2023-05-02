@@ -18,8 +18,17 @@ type DBConfig struct {
 	Database string `json:"database"`
 }
 
+type S3Config struct {
+	Endpoint  string `json:"endpoint"`
+	Bucket    string `json:"bucket"`
+	Region    string `json:"region"`
+	AccessKey string `json:"accessKey"`
+	SecretKey string `json:"secretKey"`
+}
+
 type Config struct {
 	ServerConfig   ServerConfig `json:"serverConfig"`
 	AuthConfig     AuthConfig   `json:"authConfig"`
 	DatabaseConfig DBConfig     `json:"databaseConfig"`
+	S3Config       S3Config     `json:"s3Config"`
 }

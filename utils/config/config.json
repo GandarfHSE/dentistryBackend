@@ -13,5 +13,12 @@
         "username": "postgres",
         "password": "postgres",
         "database": "test_dent_db"
+    },
+    "s3Config": {
+        "endpoint": "https://storage.yandexcloud.net",
+        "bucket": "dentpicstest",
+        "region": "ru-central1",
+        "accessKey": "YCAJE49hL7p7umT9Py9_d3UNI",
+        "secretKey": "YCO3FfkPnSGgxkcKgBT-xcxpx8p52NZGtlATNbKK"
     }
 }
