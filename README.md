@@ -135,7 +135,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 Выводит список всех услуг
 - input: None
 - curl example: `curl localhost:8083/service/list`
-- output: json with `Service` array `servicelist`
+- output: json with Service array `servicelist`
 
 ---
 
@@ -179,6 +179,27 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - output example: `{"appointment":{"id":1,"pid":1,"did":2,"sid":1,"timebegin":"2020-12-09T16:10:53Z","timeend":"2020-12-09T16:52:53Z"}}`
 
 Кидает `400`, если записи с таким айди нет
+
+## /appointment/list
+Получить список всех записей
+- input: None
+- curl example: `curl localhost:8083/appointment/list`
+- output: json with Appointment array `appointmentList`
+- output example: `{"appointmentList":[{"id":1,"pid":1,"did":2,"sid":1,"timebegin":"2020-12-09T16:10:53Z","timeend":"2020-12-09T16:52:53Z"}]}`
+
+## /appointment/list/patient
+Получить список всех записей пациента по айди
+- input: json
+- input format: int `pid`
+- curl example: `curl localhost:8083/appointment/list/patient -d '{"pid":1}'`
+- output: json with Appointment array `appointmentList`
+
+## /appointment/list/doctor
+Получить список всех записей доктора по айди
+- input: json
+- input format: int `did`
+- curl example: `curl localhost:8083/appointment/list/doctor -d '{"did":2}'`
+- output: json with Appointment array `appointmentList`
 
 # Notes
 

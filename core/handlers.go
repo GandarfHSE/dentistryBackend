@@ -56,4 +56,10 @@ func RegisterHandlers() {
 	http.HandleFunc("/appointment/create/doctor", createAppointmentDoctorHandler)
 	getAppointmentByIdHandler := jsonHandlerWrapper(appointment.GetAppointmentByIdHandler)
 	http.HandleFunc("/appointment/get", getAppointmentByIdHandler)
+	getAppointmentListHandler := noBodyHandlerWrapper(appointment.GetAppointmentListHandler)
+	http.HandleFunc("/appointment/list", getAppointmentListHandler)
+	getAppointmentListPatientHandler := jsonHandlerWrapper(appointment.GetAppointmentListPatientHandler)
+	http.HandleFunc("/appointment/list/patient", getAppointmentListPatientHandler)
+	getAppointmentListDoctorHandler := jsonHandlerWrapper(appointment.GetAppointmentListDoctorHandler)
+	http.HandleFunc("/appointment/list/doctor", getAppointmentListDoctorHandler)
 }

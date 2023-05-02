@@ -144,3 +144,56 @@ func GetAppointmentByIdHandler(req GetAppointmentByIdRequest, _ *cookie.Cookie) 
 	}
 	return &GetAppointmentByIdResponse{Appointment: app}, nil
 }
+
+func getAppointmentList(q string) ([]Appointment, merry.Error) {
+	s, err := database.GetReadSession()
+	defer s.Close()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get read session at getAppointmentList!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	apps, err := database.Get[Appointment](s, q)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	return apps, nil
+}
+
+func GetAppointmentListHandler(req GetAppointmentListRequest, _ *cookie.Cookie) (*GetAppointmentListResponse, merry.Error) {
+	q := `
+		SELECT * FROM "appointments";
+	`
+
+	apps, err := getAppointmentList(q)
+	if err != nil {
+		return nil, err
+	}
+	return &GetAppointmentListResponse{AppointmentList: apps}, nil
+}
+
+func GetAppointmentListPatientHandler(req GetAppointmentListPatientRequest, _ *cookie.Cookie) (*GetAppointmentListResponse, merry.Error) {
+	q := `
+		SELECT * FROM "appointments"
+		WHERE "pid" = %d;
+	`
+
+	apps, err := getAppointmentList(fmt.Sprintf(q, req.Pid))
+	if err != nil {
+		return nil, err
+	}
+	return &GetAppointmentListResponse{AppointmentList: apps}, nil
+}
+
+func GetAppointmentListDoctorHandler(req GetAppointmentListDoctorRequest, _ *cookie.Cookie) (*GetAppointmentListResponse, merry.Error) {
+	q := `
+		SELECT * FROM "appointments"
+		WHERE "did" = %d;
+	`
+
+	apps, err := getAppointmentList(fmt.Sprintf(q, req.Did))
+	if err != nil {
+		return nil, err
+	}
+	return &GetAppointmentListResponse{AppointmentList: apps}, nil
+}

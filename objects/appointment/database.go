@@ -56,12 +56,3 @@ func getAppointmentById(s *database.Session, id int) (Appointment, error, bool) 
 		return Appointment{}, nil, false
 	}
 }
-
-func getAppointmentList(s *database.Session) ([]Appointment, error) {
-	q := `
-		SELECT * FROM "appointments";
-	`
-
-	apps, err := database.Get[Appointment](s, q)
-	return apps, err
-}

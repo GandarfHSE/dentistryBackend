@@ -42,3 +42,18 @@ type GetAppointmentByIdRequest struct {
 type GetAppointmentByIdResponse struct {
 	Appointment Appointment `json:"appointment"`
 }
+
+type GetAppointmentListRequest struct {
+}
+
+type GetAppointmentListPatientRequest struct {
+	Pid int `json:"pid"`
+}
+
+type GetAppointmentListDoctorRequest struct {
+	Did int `json:"did"`
+}
+
+type GetAppointmentListResponse struct {
+	AppointmentList []Appointment `json:"appointmentList"`
+}
