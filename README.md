@@ -201,6 +201,25 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - curl example: `curl localhost:8083/appointment/list/doctor -d '{"did":2}'`
 - output: json with Appointment array `appointmentList`
 
+---
+
+## /clinic/create
+Создать запись о клинике. Выполняется только от админа/разработчика
+- input: json and cookie
+- input format: string `name`, string `address`, string `phone`
+- curl example: `curl localhost:8083/clinic/create -d '{"name":"Клиника нейм", "address":"ул. Пушкина, д. 42", "phone":"88005553535"}' -b $(cat cookie.txt)`
+- output: json with string `err` (see notes: empty json in response)
+
+Кидает `401`, если нет куки
+
+Кидает `403`, если роль не разработчик или админ
+
+## /clinic/list
+- input: None
+- curl example: `curl localhost:8083/clinic/list`
+- output: Service array `serviceList`
+- output example: `{"serviceList":[{"id":1,"name":"Клиника нейм","address":"ул. Пушкина, д. 42","phone":"88005553535"}]}`
+
 # Notes
 
 ### empty json in response

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/GandarfHSE/dentistryBackend/objects/appointment"
+	"github.com/GandarfHSE/dentistryBackend/objects/clinic"
 	"github.com/GandarfHSE/dentistryBackend/objects/doctor"
 	"github.com/GandarfHSE/dentistryBackend/objects/patient"
 	"github.com/GandarfHSE/dentistryBackend/objects/service"
@@ -62,4 +63,10 @@ func RegisterHandlers() {
 	http.HandleFunc("/appointment/list/patient", getAppointmentListPatientHandler)
 	getAppointmentListDoctorHandler := jsonHandlerWrapper(appointment.GetAppointmentListDoctorHandler)
 	http.HandleFunc("/appointment/list/doctor", getAppointmentListDoctorHandler)
+
+	// clinic handlers
+	createClinicHandler := jsonHandlerWrapper(clinic.CreateClinicHandler)
+	http.HandleFunc("/clinic/create", createClinicHandler)
+	getClinicListHandler := noBodyHandlerWrapper(clinic.GetClinicListHandler)
+	http.HandleFunc("/clinic/list", getClinicListHandler)
 }
