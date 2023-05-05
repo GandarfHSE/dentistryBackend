@@ -69,4 +69,10 @@ func RegisterHandlers() {
 	http.HandleFunc("/clinic/create", createClinicHandler)
 	getClinicListHandler := noBodyHandlerWrapper(clinic.GetClinicListHandler)
 	http.HandleFunc("/clinic/list", getClinicListHandler)
+	findClinicByAddressHandler := jsonHandlerWrapper(clinic.FindClinicByAddressHandler)
+	http.HandleFunc("/clinic/find/address", findClinicByAddressHandler)
+	findClinicByNameHandler := jsonHandlerWrapper(clinic.FindClinicByNameHandler)
+	http.HandleFunc("/clinic/find/name", findClinicByNameHandler)
+	findClinicByPhoneHandler := jsonHandlerWrapper(clinic.FindClinicByPhoneHandler)
+	http.HandleFunc("/clinic/find/phone", findClinicByPhoneHandler)
 }

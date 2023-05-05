@@ -220,6 +220,24 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - output: Service array `serviceList`
 - output example: `{"serviceList":[{"id":1,"name":"Клиника нейм","address":"ул. Пушкина, д. 42","phone":"88005553535"}]}`
 
+## /clinic/find/name
+- input: json
+- input format: string `name`
+- curl example: `curl localhost:8083/clinic/find/name -d '{"name":"Клиника"}'`
+- output: Service array `serviceList`
+
+## /clinic/find/address
+- input: json
+- input format: string `address`
+- curl example: `curl localhost:8083/clinic/find/address -d '{"address":"пушкина"}'`
+- output: Service array `serviceList`
+
+## /clinic/find/phone
+- input: json
+- input format: string `phone`
+- curl example: `curl localhost:8083/clinic/find/phone -d '{"phone":"8800"}'`
+- output: Service array `serviceList`
+
 # Notes
 
 ### empty json in response

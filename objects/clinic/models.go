@@ -24,3 +24,15 @@ type GetClinicListRequest struct {
 type GetClinicListResponse struct {
 	ClinicList []Clinic `json:"serviceList"`
 }
+
+type FindClinicByNameRequest struct {
+	Name string `json:"name"`
+}
+
+type FindClinicByAddressRequest struct {
+	Address string `json:"address"`
+}
+
+type FindClinicByPhoneRequest struct {
+	Phone string `json:"phone"`
+}
