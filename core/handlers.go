@@ -18,6 +18,8 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 func RegisterHandlers() {
 	http.HandleFunc("/hello", helloHandler)
 
+	http.HandleFunc("/image/upload", imageUploadHandler)
+
 	// user handlers
 	createUserHandler := jsonHandlerWrapper(user.CreateUserHandler)
 	http.HandleFunc("/user/create", createUserHandler)

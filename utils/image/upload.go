@@ -1,7 +1,8 @@
-package image
+package img
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/algo"
@@ -14,7 +15,11 @@ import (
 )
 
 // return URL
-func UploadImage(image Image) (string, error) {
+func UploadImage(image *Image) (string, error) {
+	if image == nil {
+		return "", errors.New("Image is nil!")
+	}
+
 	s3Config := config.GetS3Config()
 
 	session, err := session.NewSession(&aws.Config{
@@ -22,7 +27,7 @@ func UploadImage(image Image) (string, error) {
 		Endpoint: &s3Config.Endpoint,
 		Credentials: credentials.NewStaticCredentials(
 			s3Config.AccessKey,
-			s3Config.AccessKey,
+			s3Config.SecretKey,
 			"",
 		),
 	})
@@ -40,7 +45,7 @@ func UploadImage(image Image) (string, error) {
 	return imgURL, nil
 }
 
-func uploadImpl(s *session.Session, img Image) (string, error) {
+func uploadImpl(s *session.Session, img *Image) (string, error) {
 	s3Config := config.GetS3Config()
 
 	uploader := s3manager.NewUploader(s)

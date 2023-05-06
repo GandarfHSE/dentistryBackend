@@ -37,6 +37,14 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 ---
 
+## /image/upload
+- input: multipart form
+- input format: binary data with content of image `image_data` and string `image_extension`
+- input example can be found at [test script](https://github.com/GandarfHSE/dentistryBackend/blob/main/utils/image/test_script/uploadtest.py)
+- output: json with string `imageSource` - link to image
+
+---
+
 ## /user/create
 - input: json
 - input format: string `login`, string `password`, int `role`: 1 (пациент), 2 (доктор), 4 (админ), 8 (разработчик)
