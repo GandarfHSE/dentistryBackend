@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
+	img "github.com/GandarfHSE/dentistryBackend/utils/image"
 	"github.com/ansel1/merry"
 	"github.com/rs/zerolog/log"
 )
@@ -66,4 +67,35 @@ func noBodyHandlerWrapper[Request any, Response any](
 	decoder := emptyDecoder[Request]
 	encoder := jsonEncoder[Response]
 	return handlerWrapper(decoder, handler, encoder)
+}
+
+func imageUploadHandler(w http.ResponseWriter, r *http.Request) {
+	log.Info().Msg("Processing image upload request...")
+
+	image, err := imageDecoder(r)
+	if err != nil {
+		log.Error().Err(err).Msg("Error while decoding image!")
+		w.WriteHeader(500)
+		errorEncoder(w, err)
+		return
+	}
+
+	imgSrc, err := img.UploadImage(image)
+	if err != nil {
+		log.Error().Err(err).Msg("Error while uploading image!")
+		w.WriteHeader(500)
+		errorEncoder(w, err)
+		return
+	}
+
+	imgResponse := &img.ImageUploadResponse{ImageSource: imgSrc}
+	err = jsonEncoder(w, imgResponse)
+	if err != nil {
+		log.Error().Err(err).Msg("Error while encoding image response!")
+		w.WriteHeader(500)
+		errorEncoder(w, err)
+		return
+	}
+
+	log.Info().Msg("Image upload request has been processed successfully!")
 }
