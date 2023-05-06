@@ -9,3 +9,8 @@ var createPatientInfoTable = `
 		"passport" VARCHAR(200) NOT NULL DEFAULT ''
 	);
 `
+
+var addPatientInfoPhoto = `
+	ALTER TABLE "patients"
+	ADD COLUMN "photo" VARCHAR(200) NOT NULL DEFAULT '';
+`

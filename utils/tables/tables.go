@@ -14,6 +14,8 @@ var TableVersions = []string{
 	createPatientInfoTable,
 	createAppointmentTable,
 	createClinicTable,
+	addDoctorInfoPhoto,
+	addPatientInfoPhoto,
 }
 
 func ApplyVersion(version int, s *database.Session) {

@@ -10,3 +10,8 @@ var createDoctorInfoTable = `
 		"exp" INT NOT NULL DEFAULT 0
 	);
 `
+
+var addDoctorInfoPhoto = `
+	ALTER TABLE "doctors"
+	ADD COLUMN "photo" VARCHAR(200) NOT NULL DEFAULT '';
+`

@@ -5,12 +5,14 @@ type PatientInfo struct {
 	Uid      int    `json:"uid"`
 	Name     string `json:"name"`
 	Passport string `json:"passport"`
+	Photo    string `json:"photo"`
 }
 
 type CreatePatientInfoRequest struct {
 	Uid      int    `json:"uid"`
 	Name     string `json:"name"`
 	Passport string `json:"passport"`
+	Photo    string `json:"photo"`
 }
 
 // check README: empty json in response

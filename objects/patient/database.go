@@ -8,11 +8,11 @@ import (
 
 func addPatientInfo(s *database.Session, req CreatePatientInfoRequest) error {
 	q := `
-		INSERT INTO "patients" (uid, name, passport)
-		VALUES ($1, $2, $3);
+		INSERT INTO "patients" (uid, name, passport, photo)
+		VALUES ($1, $2, $3, $4);
 	`
 
-	err := database.Modify(s, q, req.Uid, req.Name, req.Passport)
+	err := database.Modify(s, q, req.Uid, req.Name, req.Passport, req.Photo)
 	return err
 }
 
@@ -33,7 +33,7 @@ func getPatientInfoByUid(s *database.Session, uid int) (PatientInfo, error, bool
 	q := `
 		SELECT *
 		FROM "patients"
-		WHERE "uid" = $d;
+		WHERE "uid" = %d;
 	`
 
 	return getPatientInfo(s, fmt.Sprintf(q, uid))

@@ -84,11 +84,11 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 ## /patient/create
 Добавить информацию про пациента
 - input: json
-- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `passport`
-- curl example: `curl localhost:8083/patient/create -d '{"uid":1, "name":"Carl", "passport":"1234 133742"}'`
+- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `passport`, string `photo` (url with photo, optional, default value - empty string)
+- curl example: `curl localhost:8083/patient/create -d '{"uid":1, "name":"Carl", "passport":"1234 133742", "photo":"https://storage.yandexcloud.net/dentpicstest/images/uabxxhXirN.jpg"}'`
 - output: empty json
 
-Кидает `400`, если юзера с таким uid не существует или его роль не пациент
+Кидает `400`, если юзера с таким uid не существует или его роль не пациент.
 
 ## /patient/get
 Получить информацию про пациента по его uid
@@ -96,7 +96,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input format: int `uid`
 - curl example: `curl localhost:8083/patient/get -d '{"uid":1}'`
 - output: json with PatientInfo array `info`
-- output example: `{"info":{"id":1,"uid":1,"name":"Carl","passport":"1234 133742"}}`
+- output example: `{"info":{"id":1,"uid":1,"name":"Carl","passport":"1234 133742","photo":"https://storage.yandexcloud.net/dentpicstest/images/uabxxhXirN.jpg"}}`
 
 Кидает `400`, если информации про юзера с таким uid не существует
 
@@ -105,7 +105,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 ## /doctor/create
 Добавить информацию про врача
 - input: json
-- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `post` (должность), int `exp` (типа experience - стаж работы в годах)
+- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `post` (должность), int `exp` (типа experience - стаж работы в годах), string `photo` (url with photo, optional, default value - empty string)
 - curl example: `curl localhost:8083/doctor/create -d '{"uid":1, "name":"John Doe", "post":"Доктор крутой", "exp":42}'`
 - output: json with string `err` (see notes: empty json in response)
 
@@ -117,7 +117,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input format: int `uid`
 - curl example: `curl localhost:8083/doctor/get -d '{"uid":1}'`
 - output: json with DoctorInfo array `info`
-- output example: `{"info":{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42}}`
+- output example: `{"info":{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42,"photo":""}}`
 
 Кидает `400`, если информации про юзера с таким uid не существует
 
