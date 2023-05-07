@@ -228,6 +228,13 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - output: Service array `serviceList`
 - output example: `{"serviceList":[{"id":1,"name":"Клиника нейм","address":"ул. Пушкина, д. 42","phone":"88005553535"}]}`
 
+## /clinic/find
+Сделать поиск клиники по всем трём полям (адрес, имя, телефон)
+- input: json
+- input format: string `str`
+- curl example: `curl localhost:8083/clinic/find -d '{"str":"пуш"}'`
+- output: Service array `serviceList`
+
 ## /clinic/find/name
 - input: json
 - input format: string `name`

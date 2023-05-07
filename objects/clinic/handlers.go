@@ -37,7 +37,7 @@ func CreateClinicHandler(req CreateClinicRequest, c *cookie.Cookie) (*CreateClin
 	return &CreateClinicResponse{Err: "-"}, nil
 }
 
-func GetClinicListHandler(req GetClinicListRequest, _ *cookie.Cookie) (*GetClinicListResponse, merry.Error) {
+func GetClinicListHandler(req GetClinicListRequest, _ *cookie.Cookie) (*ClinicListResponse, merry.Error) {
 	s, err := database.GetReadSession()
 	defer s.Close()
 	if err != nil {
@@ -50,14 +50,14 @@ func GetClinicListHandler(req GetClinicListRequest, _ *cookie.Cookie) (*GetClini
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &GetClinicListResponse{ClinicList: clinics}, nil
+	return &ClinicListResponse{ClinicList: clinics}, nil
 }
 
-func FindClinicByNameHandler(req FindClinicByNameRequest, _ *cookie.Cookie) (*GetClinicListResponse, merry.Error) {
+func FindClinicByNameHandler(req FindClinicByNameRequest, _ *cookie.Cookie) (*ClinicListResponse, merry.Error) {
 	s, err := database.GetReadSession()
 	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get read session at GetClinicListHandler!")
+		log.Error().Err(err).Msg("Can't get read session at FindClinicByNameHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
@@ -70,14 +70,14 @@ func FindClinicByNameHandler(req FindClinicByNameRequest, _ *cookie.Cookie) (*Ge
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &GetClinicListResponse{ClinicList: clinics}, nil
+	return &ClinicListResponse{ClinicList: clinics}, nil
 }
 
-func FindClinicByAddressHandler(req FindClinicByAddressRequest, _ *cookie.Cookie) (*GetClinicListResponse, merry.Error) {
+func FindClinicByAddressHandler(req FindClinicByAddressRequest, _ *cookie.Cookie) (*ClinicListResponse, merry.Error) {
 	s, err := database.GetReadSession()
 	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get read session at GetClinicListHandler!")
+		log.Error().Err(err).Msg("Can't get read session at FindClinicByAddressHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
@@ -90,14 +90,14 @@ func FindClinicByAddressHandler(req FindClinicByAddressRequest, _ *cookie.Cookie
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &GetClinicListResponse{ClinicList: clinics}, nil
+	return &ClinicListResponse{ClinicList: clinics}, nil
 }
 
-func FindClinicByPhoneHandler(req FindClinicByPhoneRequest, _ *cookie.Cookie) (*GetClinicListResponse, merry.Error) {
+func FindClinicByPhoneHandler(req FindClinicByPhoneRequest, _ *cookie.Cookie) (*ClinicListResponse, merry.Error) {
 	s, err := database.GetReadSession()
 	defer s.Close()
 	if err != nil {
-		log.Error().Err(err).Msg("Can't get read session at GetClinicListHandler!")
+		log.Error().Err(err).Msg("Can't get read session at FindClinicByPhoneHandler!")
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
@@ -110,5 +110,25 @@ func FindClinicByPhoneHandler(req FindClinicByPhoneRequest, _ *cookie.Cookie) (*
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	return &GetClinicListResponse{ClinicList: clinics}, nil
+	return &ClinicListResponse{ClinicList: clinics}, nil
+}
+
+func FindClinicHandler(req FindClinicRequest, _ *cookie.Cookie) (*ClinicListResponse, merry.Error) {
+	s, err := database.GetReadSession()
+	defer s.Close()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get read session at FindClinicHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	q := `
+		SELECT * FROM "clinics"
+		WHERE "phone" ~* $1 OR "address" ~* $1 OR "name" ~* $1;
+	`
+	clinics, err := database.Get[Clinic](s, q, req.Str)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	return &ClinicListResponse{ClinicList: clinics}, nil
 }
