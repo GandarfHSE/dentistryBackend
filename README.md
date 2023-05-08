@@ -253,6 +253,44 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - curl example: `curl localhost:8083/clinic/find/phone -d '{"phone":"8800"}'`
 - output: Service array `serviceList`
 
+---
+
+## /review/create
+Создать отзыв
+- input: json
+- input format: int `cid` (clinic id), int `did` (doctor id from `users` table), int `sid` (service id), int `score` (from [1..5]), string `description`. All fields are optional.
+- curl example: `curl localhost:8083/review/create -d '{"did":1, "score": 3, "description": "отзыв бла бла"}'`
+- output: json with string `err` (see notes: empty json in response)
+
+Кидает `400`, если айдишник не 0 и не существует или если `score` не от 1 до 5. (пока не кидает, но должно, смотри #32)
+
+## /review/list
+- input: None
+- curl example: `curl localhost:8083/review/list`
+- output: Review list `reviewList`
+- output example: `{"reviewList":[{"id":1,"cid":1,"did":0,"sid":0,"score":3,"description":""},{"id":2,"cid":0,"did":1,"sid":0,"score":0,"description":"отзыв бла бла"}]}`
+
+## /review/find/doctor
+Найти все отзывы на доктора
+- input: json
+- input format: int `did`
+- curl example: `curl localhost:8083/review/find/doctor -d '{"did":1}'`
+- output: Review list `reviewList`
+
+## /review/find/clinic
+Найти все отзывы на клинику
+- input: json
+- input format: int `cid`
+- curl example: `curl localhost:8083/review/find/clinic -d '{"cid":1}'`
+- output: Review list `reviewList`
+
+## /review/find/service
+Найти все отзывы на услугу
+- input: json
+- input format: int `sid`
+- curl example: `curl localhost:8083/review/find/service -d '{"sid":1}'`
+- output: Review list `reviewList`
+
 # Notes
 
 ### empty json in response

@@ -7,6 +7,7 @@ import (
 	"github.com/GandarfHSE/dentistryBackend/objects/clinic"
 	"github.com/GandarfHSE/dentistryBackend/objects/doctor"
 	"github.com/GandarfHSE/dentistryBackend/objects/patient"
+	"github.com/GandarfHSE/dentistryBackend/objects/review"
 	"github.com/GandarfHSE/dentistryBackend/objects/service"
 	"github.com/GandarfHSE/dentistryBackend/objects/user"
 )
@@ -79,4 +80,16 @@ func RegisterHandlers() {
 	http.HandleFunc("/clinic/find/name", findClinicByNameHandler)
 	findClinicByPhoneHandler := jsonHandlerWrapper(clinic.FindClinicByPhoneHandler)
 	http.HandleFunc("/clinic/find/phone", findClinicByPhoneHandler)
+
+	// review handlers
+	createReviewHandler := jsonHandlerWrapper(review.CreateReviewHandler)
+	http.HandleFunc("/review/create", createReviewHandler)
+	getReviewListHandler := noBodyHandlerWrapper(review.GetReviewListHandler)
+	http.HandleFunc("/review/list", getReviewListHandler)
+	findClinicReviewHandler := jsonHandlerWrapper(review.FindClinicReviewHandler)
+	http.HandleFunc("/review/find/clinic", findClinicReviewHandler)
+	findDoctorReviewHandler := jsonHandlerWrapper(review.FindDoctorReviewHandler)
+	http.HandleFunc("/review/find/doctor", findDoctorReviewHandler)
+	findServiceReviewHandler := jsonHandlerWrapper(review.FindServiceReviewHandler)
+	http.HandleFunc("/review/find/service", findServiceReviewHandler)
 }

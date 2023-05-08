@@ -21,3 +21,22 @@ type CreateReviewRequest struct {
 type CreateReviewResponse struct {
 	Err string `json:"err"`
 }
+
+type GetReviewListRequest struct {
+}
+
+type ReviewListResponse struct {
+	ReviewList []Review `json:"reviewList"`
+}
+
+type FindDoctorReviewRequest struct {
+	Did int `json:"did"`
+}
+
+type FindClinicReviewRequest struct {
+	Cid int `json:"cid"`
+}
+
+type FindServiceReviewRequest struct {
+	Sid int `json:"sid"`
+}
