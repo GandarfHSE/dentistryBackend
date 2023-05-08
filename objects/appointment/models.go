@@ -57,3 +57,18 @@ type GetAppointmentListDoctorRequest struct {
 type GetAppointmentListResponse struct {
 	AppointmentList []Appointment `json:"appointmentList"`
 }
+
+type Timeslot struct {
+	Timebegin time.Time `json:"timebegin"`
+	Timeend   time.Time `json:"timeend"`
+}
+
+type GetFreeTimeslotsRequest struct {
+	Did  int    `json:"did"`
+	Sid  int    `json:"sid"`
+	Date string `json:"date"`
+}
+
+type GetFreeTimeslotsResponse struct {
+	FreeTimeslots []Timeslot `json:"freeTimeslots"`
+}

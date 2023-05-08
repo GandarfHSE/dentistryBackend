@@ -197,3 +197,26 @@ func GetAppointmentListDoctorHandler(req GetAppointmentListDoctorRequest, _ *coo
 	}
 	return &GetAppointmentListResponse{AppointmentList: apps}, nil
 }
+
+func GetFreeTimeslotsHandler(req GetFreeTimeslotsRequest, _ *cookie.Cookie) (*GetFreeTimeslotsResponse, merry.Error) {
+	s, err := database.GetReadSession()
+	defer s.Close()
+	if err != nil {
+		log.Error().Err(err).Msg("Can't get read session at GetFreeTimeslotsHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	dateTime, err := time.Parse("2006-01-02", req.Date)
+	if err != nil {
+		log.Error().Err(err).Msg("Date parsing error in GetFreeTimeslotsHandler!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	timeslots, err := getFreeTimeslots(s, req.Did, req.Sid, dateTime)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get free timeslots!")
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+
+	return &GetFreeTimeslotsResponse{FreeTimeslots: timeslots}, nil
+}

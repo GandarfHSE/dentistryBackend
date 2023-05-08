@@ -133,8 +133,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 ## /service/create
 - input: json
-- input format: string `name`, string `description`, int `cost`, int `duration`
-- curl example: `curl localhost:8083/service/create -d '{"name":"Чистка зубов", "description":"оч круто чистим", "cost":300, "duration":42}'`
+- input format: string `name`, string `description`, int `cost`, int `duration` (длительность в минутах)
+- curl example: `curl localhost:8083/service/create -d '{"name":"Чистка зубов", "description":"Профессиональная чистка зубов", "cost":300, "duration":60}'`
 - output: json with string `err` (see notes: empty json in response)
 
 Кидает `400`, если услуга с таким именем существует.
@@ -208,6 +208,14 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input format: int `did`
 - curl example: `curl localhost:8083/appointment/list/doctor -d '{"did":2}'`
 - output: json with Appointment array `appointmentList`
+
+## /appointment/free
+Получить список свободных таймслотов на запись к доктору. Работает в предположении рабочих часов с 9 до 18 (issue #33).
+- input: json
+- input format: int `did` (айди доктора из таблицы `users`), int `sid` (айди услуги), string `date` (дата в формате `YYYY-MM-DD`)
+- curl example: `curl localhost:8083/appointment/free -d '{"did":2, "sid":1, "date":"2023-08-09"}'`
+- output: Timeslot array `freeTimeslots`
+- output example: `{"freeTimeslots":[{"timebegin":"2023-08-09T13:00:00Z","timeend":"2023-08-09T15:00:00Z"},{"timebegin":"2023-08-09T15:00:00Z","timeend":"2023-08-09T17:00:00Z"}]}`
 
 ---
 
