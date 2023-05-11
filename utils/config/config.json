@@ -1,4 +1,7 @@
 {
+    "commonConfig": {
+        "keyword": "kek"
+    },
     "serverConfig": {
         "host": "localhost",
         "port": "8083"

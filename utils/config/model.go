@@ -1,5 +1,9 @@
 package config
 
+type CommonConfig struct {
+	Keyword string `json:"keyword"`
+}
+
 type ServerConfig struct {
 	Port string `json:"port"`
 	Host string `json:"host"`
@@ -27,6 +31,7 @@ type S3Config struct {
 }
 
 type Config struct {
+	CommonConfig   CommonConfig `json:"commonConfig"`
 	ServerConfig   ServerConfig `json:"serverConfig"`
 	AuthConfig     AuthConfig   `json:"authConfig"`
 	DatabaseConfig DBConfig     `json:"databaseConfig"`

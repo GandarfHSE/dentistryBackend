@@ -6,6 +6,10 @@ import (
 	pgx "github.com/jackc/pgx/v5"
 )
 
+func GetCommonConfig() *CommonConfig {
+	return &config.CommonConfig
+}
+
 func GetServerConfig() *ServerConfig {
 	return &config.ServerConfig
 }

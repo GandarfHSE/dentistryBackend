@@ -46,12 +46,15 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 ---
 
 ## /user/create
+Создать юзера. Для создания юзера с ролью выше пациента, необходимо предоставить кодовое слово
 - input: json
-- input format: string `login`, string `password`, int `role`: 1 (пациент), 2 (доктор), 4 (админ), 8 (разработчик)
-- curl example: `curl localhost:8083/user/create -d '{"login":"kek", "password":"lol", "role":1}'`
+- input format: string `login`, string `password`, int `role`: 1 (пациент), 2 (доктор), 4 (админ), 8 (разработчик), string `keyword` (необязательно)
+- curl example: `curl localhost:8083/user/create -d '{"login":"kek", "password":"lol", "role":2, "keyword":"kek"}'`
 - output: json with string `err` (see notes: empty json in response)
 
 Кидает `400`, если юзер существует или если роль некорректна (не 1/2/4/8).
+
+Кидает `403`, если роль юзера выше пациента (2/4/8), но кодовое слово не корректно.
 
 ## /user/login
 - input: json

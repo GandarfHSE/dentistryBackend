@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/GandarfHSE/dentistryBackend/core/auth"
 	"github.com/GandarfHSE/dentistryBackend/utils/algo"
+	"github.com/GandarfHSE/dentistryBackend/utils/config"
 	"github.com/GandarfHSE/dentistryBackend/utils/cookie"
 	"github.com/GandarfHSE/dentistryBackend/utils/database"
 	"github.com/GandarfHSE/dentistryBackend/utils/role"
@@ -27,6 +28,9 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 	}
 	if !role.IsRoleValid(req.Role) {
 		return nil, merry.New("Invalid role").WithHTTPCode(400)
+	}
+	if role.IsRoleAtLeast(req.Role, role.Doctor) && req.Keyword != config.GetCommonConfig().Keyword {
+		return nil, merry.New("Invalid keyword!").WithHTTPCode(403)
 	}
 
 	if err = addUser(s, req); err != nil {
