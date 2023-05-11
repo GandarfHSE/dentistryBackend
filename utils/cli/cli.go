@@ -9,6 +9,7 @@ import (
 
 type CLIArgsModel struct {
 	DoHardMigration bool
+	DoHTTPS         bool
 }
 
 var _CLIArgs *CLIArgsModel
@@ -25,6 +26,13 @@ func ParseArgs() {
 				Required:    false,
 				Destination: &_CLIArgs.DoHardMigration,
 			},
+			&cli.BoolFlag{
+				Name:        "https",
+				Usage:       "Run on https server instead of http",
+				Value:       false,
+				Required:    false,
+				Destination: &_CLIArgs.DoHTTPS,
+			},
 		},
 	}
 
@@ -38,4 +46,11 @@ func GetDoHardMigrationFlag() bool {
 		log.Fatal().Msg("Getting DoHardMigration flags, but flags have not been parsed!")
 	}
 	return _CLIArgs.DoHardMigration
+}
+
+func GetDoHTTPSFlag() bool {
+	if _CLIArgs == nil {
+		log.Fatal().Msg("Getting DoHTTPS flags, but flags have not been parsed!")
+	}
+	return _CLIArgs.DoHTTPS
 }

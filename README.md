@@ -22,6 +22,9 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 ### --hard
 Дропает и пересоздаёт все таблицы. Все данные, находящиеся в БД, будут удалены.
 
+### --https
+Сервер слушает запросы на протоколе HTTPS. Необходимо предоставить путь к сертификату в [конфиге](https://github.com/GandarfHSE/dentistryBackend/blob/main/utils/config/config.json).
+
 # API
 
 Все доступные хендлеры можно найти в [core/handlers.go](https://github.com/GandarfHSE/dentistryBackend/blob/main/core/handlers.go).

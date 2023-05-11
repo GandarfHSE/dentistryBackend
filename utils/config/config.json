@@ -2,6 +2,10 @@
     "commonConfig": {
         "keyword": "kek"
     },
+    "httpsConfig": {
+        "certFile": "../localhost.crt",
+        "keyFile": "../localhost.key"
+    },
     "serverConfig": {
         "host": "localhost",
         "port": "8083"

@@ -10,6 +10,10 @@ func GetCommonConfig() *CommonConfig {
 	return &config.CommonConfig
 }
 
+func GetHTTPSConfig() *HTTPSConfig {
+	return &config.HTTPSConfig
+}
+
 func GetServerConfig() *ServerConfig {
 	return &config.ServerConfig
 }

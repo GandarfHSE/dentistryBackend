@@ -4,6 +4,11 @@ type CommonConfig struct {
 	Keyword string `json:"keyword"`
 }
 
+type HTTPSConfig struct {
+	CertFile string `json:"certFile"`
+	KeyFile  string `json:"keyFile"`
+}
+
 type ServerConfig struct {
 	Port string `json:"port"`
 	Host string `json:"host"`
@@ -32,6 +37,7 @@ type S3Config struct {
 
 type Config struct {
 	CommonConfig   CommonConfig `json:"commonConfig"`
+	HTTPSConfig    HTTPSConfig  `json:"httpsConfig"`
 	ServerConfig   ServerConfig `json:"serverConfig"`
 	AuthConfig     AuthConfig   `json:"authConfig"`
 	DatabaseConfig DBConfig     `json:"databaseConfig"`
