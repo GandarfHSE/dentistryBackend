@@ -6,6 +6,13 @@
 *.dylib
 main/main
 
+# cookie file for tests
+cookie.txt
+# TLS keys
+localhost.*
+# UML diagrams
+*.puml
+
 # Test binary, built with `go test -c`
 *.test
 
