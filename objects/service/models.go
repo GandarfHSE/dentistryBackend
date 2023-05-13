@@ -26,3 +26,9 @@ type GetServiceListRequest struct {
 type GetServiceListResponse struct {
 	ServiceList []Service `json:"servicelist"`
 }
+
+type ServiceLink struct {
+	Id  int `json:"id"`
+	Did int `json:"did"`
+	Sid int `json:"sid"`
+}

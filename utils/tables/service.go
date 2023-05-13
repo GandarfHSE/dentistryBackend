@@ -9,3 +9,11 @@ var createServiceTable = `
 		"duration" INT NOT NULL
 	);
 `
+
+var createServiceLinkTable = `
+	CREATE TABLE "service_links" (
+		"id" SERIAL PRIMARY KEY,
+		"did" INT NOT NULL,
+		"sid" INT NOT NULL
+	);
+`
