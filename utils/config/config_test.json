@@ -1,0 +1,31 @@
+{
+    "commonConfig": {
+        "keyword": "kek"
+    },
+    "httpsConfig": {
+        "certFile": "../localhost.crt",
+        "keyFile": "../localhost.key"
+    },
+    "serverConfig": {
+        "host": "localhost",
+        "port": "8081"
+    },
+    "authConfig": {
+        "privatePath": "../privatekey.pem",
+        "publicPath": "../publickey.pem"
+    },
+    "databaseConfig": {
+        "host": "localhost",
+        "port":     5432,
+        "username": "postgres",
+        "password": "postgres",
+        "database": "test_db"
+    },
+    "s3Config": {
+        "endpoint": "https://storage.yandexcloud.net",
+        "bucket": "dentpicstest",
+        "region": "ru-central1",
+        "accessKey": "YCAJE49hL7p7umT9Py9_d3UNI",
+        "secretKey": "YCO3FfkPnSGgxkcKgBT-xcxpx8p52NZGtlATNbKK"
+    }
+}

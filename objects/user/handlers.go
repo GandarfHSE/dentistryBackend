@@ -33,7 +33,7 @@ func CreateUserHandler(req CreateUserRequest, _ *cookie.Cookie) (*CreateUserResp
 		return nil, merry.New("Invalid keyword!").WithHTTPCode(403)
 	}
 
-	if err = addUser(s, req); err != nil {
+	if err = AddUser(s, req); err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 

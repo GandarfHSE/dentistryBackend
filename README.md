@@ -17,6 +17,10 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 
 Прибить можно с помощью `Ctrl + C`
 
+# Unit tests
+
+Для создайте базу данных `test_db` (конфигурируется [тут](https://github.com/GandarfHSE/dentistryBackend/blob/main/utils/config/config_test.json)) и добавьте путь к тестовому конфигу в переменную окружения `DENT_TEST_CONFIG_PATH`.
+
 # CLI
 
 ### --hard

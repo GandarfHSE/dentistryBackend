@@ -10,8 +10,8 @@ import (
 
 var config *Config
 
-func LoadConfig() {
-	configPath := os.Getenv("DENT_CONFIG_PATH")
+func loadConfig(configPathEnvName string) {
+	configPath := os.Getenv(configPathEnvName)
 	config = &Config{}
 
 	configFile, err := os.Open(configPath)
@@ -31,4 +31,12 @@ func LoadConfig() {
 	}
 
 	log.Info().Msg("Config has been read successfully!")
+}
+
+func LoadConfig() {
+	loadConfig("DENT_CONFIG_PATH")
+}
+
+func LoadTestConfig() {
+	loadConfig("DENT_TEST_CONFIG_PATH")
 }

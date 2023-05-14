@@ -10,7 +10,7 @@ import (
 	"github.com/GandarfHSE/dentistryBackend/utils/role"
 )
 
-func addUser(s *database.Session, req CreateUserRequest) error {
+func AddUser(s *database.Session, req CreateUserRequest) error {
 	q := `
 		INSERT INTO "users" (login, password, role)
 		VALUES ($1, $2, $3);
