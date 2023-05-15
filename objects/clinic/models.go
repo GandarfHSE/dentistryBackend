@@ -22,7 +22,7 @@ type GetClinicListRequest struct {
 }
 
 type ClinicListResponse struct {
-	ClinicList []Clinic `json:"serviceList"`
+	ClinicList []Clinic `json:"clinicList"`
 }
 
 type FindClinicByNameRequest struct {
