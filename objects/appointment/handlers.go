@@ -14,25 +14,31 @@ import (
 )
 
 func createAppointment(s *database.Session, pid int, did int, sid int, t time.Time) merry.Error {
-	is_role_correct, err := user.CheckUserRole(s, pid, role.Patient)
+	is_role_correct, err, exists := user.CheckUserRole(s, pid, role.Patient)
 	if err != nil {
 		return merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !exists {
+		return merry.New(fmt.Sprintf("User with uid = %d does not exist!", pid)).WithHTTPCode(400)
 	}
 	if !is_role_correct {
 		return merry.New(fmt.Sprintf("User's role with uid = %d is not patient!", pid)).WithHTTPCode(400)
 	}
 
-	is_role_correct, err = user.CheckUserRole(s, did, role.Doctor)
+	is_role_correct, err, exists = user.CheckUserRole(s, did, role.Doctor)
 	if err != nil {
 		return merry.Wrap(err).WithHTTPCode(500)
 	}
+	if !exists {
+		return merry.New(fmt.Sprintf("User with uid = %d does not exist!", did)).WithHTTPCode(400)
+	}
 	if !is_role_correct {
-		return merry.New(fmt.Sprintf("User's role with uid = %d is not doctor!", did)).WithHTTPCode(400)
+		return merry.New(fmt.Sprintf("User's role with uid = %d is not doctor!", did)).WithHTTPCode(403)
 	}
 
 	exist, err := service.IsServiceExist(s, sid)
 	if !exist {
-		return merry.New(fmt.Sprintf("Service with sid = %d does not exist!", sid)).WithHTTPCode(400)
+		return merry.New(fmt.Sprintf("Service with sid = %d does not exist!", sid)).WithHTTPCode(403)
 	}
 
 	tend, err := service.GetServiceEndpoint(s, t, sid)

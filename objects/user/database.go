@@ -83,13 +83,10 @@ func GetRoleFromCookie(s *database.Session, c *cookie.Cookie) (int, error) {
 	return user.Role, nil
 }
 
-func CheckUserRole(s *database.Session, uid int, role int) (bool, error) {
-	user, err, exist := GetUserById(s, uid)
+func CheckUserRole(s *database.Session, uid int, role int) (bool, error, bool) {
+	user, err, exists := GetUserById(s, uid)
 	if err != nil {
-		return false, err
+		return false, err, exists
 	}
-	if !exist {
-		return false, errors.New(fmt.Sprintf("User with uid = %d does not exist!", uid))
-	}
-	return user.Role == role, nil
+	return user.Role == role, nil, exists
 }

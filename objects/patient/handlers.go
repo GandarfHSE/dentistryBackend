@@ -19,9 +19,12 @@ func CreatePatientInfoHandler(req CreatePatientInfoRequest, _ *cookie.Cookie) (*
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	is_role_correct, err := user.CheckUserRole(s, req.Uid, role.Patient)
+	is_role_correct, err, exists := user.CheckUserRole(s, req.Uid, role.Patient)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !exists {
+		return nil, merry.New(fmt.Sprintf("User with uid = %d does not exist!", req.Uid)).WithHTTPCode(400)
 	}
 	if !is_role_correct {
 		return nil, merry.New(fmt.Sprintf("User's role with uid = %d is not patient!", req.Uid)).WithHTTPCode(400)
