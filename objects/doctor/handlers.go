@@ -30,6 +30,14 @@ func CreateDoctorInfoHandler(req CreateDoctorInfoRequest, _ *cookie.Cookie) (*Cr
 		return nil, merry.New(fmt.Sprintf("User's role with uid = %d is not doctor!", req.Uid)).WithHTTPCode(400)
 	}
 
+	_, err, exists = getDoctorInfoByUid(s, req.Uid)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	if exists {
+		return nil, merry.New(fmt.Sprintf("Info for doctor with uid = %d exists!", req.Uid)).WithHTTPCode(400)
+	}
+
 	err = addDoctorInfo(s, req)
 	return &CreateDoctorInfoResponse{Err: "-"}, nil
 }

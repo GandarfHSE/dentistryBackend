@@ -96,9 +96,9 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input: json
 - input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `passport`, string `photo` (url with photo, optional, default value - empty string)
 - curl example: `curl localhost:8083/patient/create -d '{"uid":1, "name":"Carl", "passport":"1234 133742", "photo":"https://storage.yandexcloud.net/dentpicstest/images/uabxxhXirN.jpg"}'`
-- output: empty json
+- output: json with string `err` (see notes: empty json in response)
 
-Кидает `400`, если юзера с таким uid не существует или его роль не пациент.
+Кидает `400`, если юзера с таким uid не существует, его роль не пациент или если информацию про него уже существует.
 
 ## /patient/get
 Получить информацию про пациента по его uid
@@ -119,7 +119,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - curl example: `curl localhost:8083/doctor/create -d '{"uid":1, "name":"John Doe", "post":"Доктор крутой", "exp":42}'`
 - output: json with string `err` (see notes: empty json in response)
 
-Кидает `400`, если юзера с таким uid не существует или его роль не доктор
+Кидает `400`, если юзера с таким uid не существует, его роль не доктор или если информацию про него уже существует
 
 ## /doctor/get
 Получить информацию про врача по его uid

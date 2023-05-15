@@ -30,6 +30,14 @@ func CreatePatientInfoHandler(req CreatePatientInfoRequest, _ *cookie.Cookie) (*
 		return nil, merry.New(fmt.Sprintf("User's role with uid = %d is not patient!", req.Uid)).WithHTTPCode(400)
 	}
 
+	_, err, exists = getPatientInfoByUid(s, req.Uid)
+	if err != nil {
+		return nil, merry.Wrap(err).WithHTTPCode(500)
+	}
+	if !exists {
+		return nil, merry.New(fmt.Sprintf("Info for patient with uid = %d exists!", req.Uid)).WithHTTPCode(400)
+	}
+
 	err = addPatientInfo(s, req)
 	return &CreatePatientInfoResponse{Err: "-"}, nil
 }
@@ -42,7 +50,7 @@ func GetPatientInfoHandler(req GetPatientInfoRequest, _ *cookie.Cookie) (*GetPat
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
 
-	doctorInfo, err, exists := getPatientInfoByUid(s, req.Uid)
+	patientInfo, err, exists := getPatientInfoByUid(s, req.Uid)
 	if err != nil {
 		return nil, merry.Wrap(err).WithHTTPCode(500)
 	}
@@ -50,5 +58,5 @@ func GetPatientInfoHandler(req GetPatientInfoRequest, _ *cookie.Cookie) (*GetPat
 		return nil, merry.New(fmt.Sprintf("Patient info about uid = %v does not exist!", req.Uid)).WithHTTPCode(400)
 	}
 
-	return &GetPatientInfoResponse{Info: doctorInfo}, nil
+	return &GetPatientInfoResponse{Info: patientInfo}, nil
 }
