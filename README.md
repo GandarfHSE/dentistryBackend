@@ -115,8 +115,8 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 ## /doctor/create
 Добавить информацию про врача
 - input: json
-- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `post` (должность), int `exp` (типа experience - стаж работы в годах), string `photo` (url with photo, optional, default value - empty string)
-- curl example: `curl localhost:8083/doctor/create -d '{"uid":1, "name":"John Doe", "post":"Доктор крутой", "exp":42}'`
+- input format: int `uid` (айдишник юзера из таблицы `users`), string `name`, string `post` (должность), int `exp` (типа experience - стаж работы в годах), string `photo` (url with photo, optional, default value - empty string), string `description` (optional, default value - empty string)
+- curl example: `curl localhost:8083/doctor/create -d '{"uid":1, "name":"John Doe", "post":"Доктор крутой", "exp":42, "description": "Описание доктора"}'`
 - output: json with string `err` (see notes: empty json in response)
 
 Кидает `400`, если юзера с таким uid не существует, его роль не доктор или если информацию про него уже существует
@@ -127,7 +127,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input format: int `uid`
 - curl example: `curl localhost:8083/doctor/get -d '{"uid":1}'`
 - output: json with DoctorInfo array `info`
-- output example: `{"info":{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42,"photo":""}}`
+- output example: `{"info":{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42,"photo":"","description":"Описание доктора"}}`
 
 Кидает `400`, если информации про юзера с таким uid не существует
 
@@ -137,7 +137,7 @@ openssl rsa -in privatekey.pem -out publickey.pem -pubout -outform PEM
 - input format: string `name` - подстрока в имени
 - curl example: `curl localhost:8083/doctor/find/namesubstr -d '{"name":"oHn"}'`
 - output: json with DoctorInfo array `result`
-- output example: `{"result":[{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42}]}`
+- output example: `{"result":[{"id":1,"uid":1,"name":"John Doe","post":"Доктор крутой","exp":42,"photo":"","description":"Описание доктора"}]}`
 
 ---
 

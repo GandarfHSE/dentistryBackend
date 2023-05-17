@@ -8,11 +8,11 @@ import (
 
 func addDoctorInfo(s *database.Session, req CreateDoctorInfoRequest) error {
 	q := `
-		INSERT INTO "doctors" (uid, name, post, exp, photo)
-		VALUES ($1, $2, $3, $4, $5);
+		INSERT INTO "doctors" (uid, name, post, exp, photo, description)
+		VALUES ($1, $2, $3, $4, $5, $6);
 	`
 
-	err := database.Modify(s, q, req.Uid, req.Name, req.Post, req.Exp, req.Photo)
+	err := database.Modify(s, q, req.Uid, req.Name, req.Post, req.Exp, req.Photo, req.Description)
 	return err
 }
 

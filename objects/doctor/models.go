@@ -1,20 +1,22 @@
 package doctor
 
 type DoctorInfo struct {
-	Id    int    `json:"id"`
-	Uid   int    `json:"uid"`
-	Name  string `json:"name"`
-	Post  string `json:"post"`
-	Exp   int    `json:"exp"`
-	Photo string `json:"photo"`
+	Id          int    `json:"id"`
+	Uid         int    `json:"uid"`
+	Name        string `json:"name"`
+	Post        string `json:"post"`
+	Exp         int    `json:"exp"`
+	Photo       string `json:"photo"`
+	Description string `json:"description"`
 }
 
 type CreateDoctorInfoRequest struct {
-	Uid   int    `json:"uid"`
-	Name  string `json:"name"`
-	Post  string `json:"post"`
-	Exp   int    `json:"exp"`
-	Photo string `json:"photo"`
+	Uid         int    `json:"uid"`
+	Name        string `json:"name"`
+	Post        string `json:"post"`
+	Exp         int    `json:"exp"`
+	Photo       string `json:"photo"`
+	Description string `json:"description"`
 }
 
 // check README: empty json in response

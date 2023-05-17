@@ -15,3 +15,8 @@ var addDoctorInfoPhoto = `
 	ALTER TABLE "doctors"
 	ADD COLUMN "photo" VARCHAR(200) NOT NULL DEFAULT '';
 `
+
+var addDoctorInfoDescription = `
+	ALTER TABLE "doctors"
+	ADD COLUMN "description" VARCHAR(2000) NOT NULL DEFAULT '';
+`
